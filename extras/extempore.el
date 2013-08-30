@@ -1498,6 +1498,7 @@ buffer."
   (if extempore-slave-buffer-server
       (progn (delete-process extempore-slave-buffer-server)
              (setq extempore-slave-buffer-server nil)
+             (cancel-function-timers #'extempore-slave-buffer-sync-buffer)
              (message "Stopping the slave buffer server."))))
 
 (defun extempore-slave-buffer-start (port)
@@ -1578,7 +1579,7 @@ buffer."
          (read-port (string-to-number
                      (ido-completing-read
                       "Port: "
-                      (number-to-string extempore-slave-buffer-server-port)
+                      (list (number-to-string extempore-slave-buffer-server-port))
                       nil nil nil nil
                       (number-to-string extempore-slave-buffer-server-port)))))
      (list read-host read-port)))
