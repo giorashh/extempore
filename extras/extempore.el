@@ -1526,6 +1526,12 @@ buffer."
     (message "Error: couldn't start the slave buffer server.")
     extempore-slave-buffer-server))
 
+(defun extempore-cleanup-slave-connections ()
+  (dolist (proc (process-list))
+    (if (string= (substring (process-name proc) 0 4) "esb-")
+      (unless (member (process-status proc) '(run open))
+        (delete-process proc)))))
+
 (defun extempore-slave-buffer-server-sentinel (proc str)
   (message "extempore server: %s" str))
 
@@ -1576,7 +1582,7 @@ buffer."
 (defvar extempore-slave-buffer-refresh-interval 5.0
   "The refresh interval (in seconds) for syncing the slave buffers")
 
-(defun extempore-slave-buffer-push-current-buffer-to-slave (host port)
+(defun extempore-slave-buffer-push-current-buffer (host port)
   (interactive
    (let ((read-host (ido-completing-read
                      "Hostname: " (list "localhost") nil nil nil nil "localhost"))
