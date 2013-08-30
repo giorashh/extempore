@@ -1556,8 +1556,8 @@ buffer."
       (let ((inhibit-read-only t))
         (delete-region (point-min) (point-max))
         (insert buffer-text))
-      (if (not (eq buf curr-buf))
-          (set-window-start start-pos)))))
+      (if (eq buf curr-buf)
+          (set-window-start (get-buffer-window buf) start-pos)))))
 
 (defun extempore-slave-buffer-server-filter (proc str)
   (let ((request-list (read str))
