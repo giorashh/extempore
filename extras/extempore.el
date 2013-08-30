@@ -1498,7 +1498,7 @@ buffer."
   (if extempore-slave-buffer-server
       (progn (delete-process extempore-slave-buffer-server)
              (setq extempore-slave-buffer-server nil)
-             (cancel-function-timers #'extempore-slave-buffer-sync-buffer)
+             (cancel-function-timers #'extempore-slave-buffer-sync-slave-buffer)
              (extempore-slave-buffer-delete-all-connections)
              (message "Stopping the slave buffer server."))))
 
@@ -1541,15 +1541,16 @@ buffer."
 (defun extempore-slave-buffer-server-sentinel (proc str)
   (message "extempore server: %s" str))
 
-(defun extempore-slave-buffer-setup-proc (proc buffer-name)
+(defun extempore-slave-buffer-create-buffer (proc buffer-name)
   (let ((buf (get-buffer-create buffer-name)))
     (set-process-buffer proc buf)
     (with-current-buffer buf
       (buffer-disable-undo)
       (read-only-mode 1))
-    (message "extempore slave buffer set up: %s" buffer-name)))
+    (message "extempore slave buffer set up: %s" buffer-name)
+    buf))
 
-(defun extempore-slave-buffer-update-slave (buf buffer-text start-pos)
+(defun extempore-slave-buffer-update-slave-buffer (buf buffer-text start-pos)
   (let ((curr-buf (current-buffer)))
     (with-current-buffer buf
       (let ((inhibit-read-only t))
@@ -1564,18 +1565,18 @@ buffer."
     (cond ((not (= (length request-list) 3))
            (message "Error: malformed buffer state recieved from master buffer."))
           ((null proc-buf)
-           (extempore-slave-buffer-setup-proc proc (car request-list))
-           (extempore-slave-buffer-update-slave proc-buf
-                                                (cadr request-list)
-                                                (caddr request-list)))
+           (extempore-slave-buffer-update-slave-buffer
+            (extempore-slave-buffer-create-buffer proc (car request-list))
+            (cadr request-list)
+            (caddr request-list)))
           ((string= (buffer-name proc-buf)
                     (car request-list))
-           (extempore-slave-buffer-update-slave proc-buf
+           (extempore-slave-buffer-update-slave-buffer proc-buf
                                                 (cadr request-list)
                                                 (caddr request-list)))
           (t (message "extempore slave buffer mode: received state from wrong buffer.")))))
 
-(defun extempore-slave-buffer-sync-buffer (buf)
+(defun extempore-slave-buffer-sync-slave-buffer (buf)
   (with-current-buffer buf
     (let ((proc (get-buffer-process buf)))
       (if proc
@@ -1588,6 +1589,15 @@ buffer."
 (defvar extempore-slave-buffer-refresh-interval 5.0
   "The refresh interval (in seconds) for syncing the slave buffers")
 
+(defun extempore-slave-buffer-setup-buffer (buf host port)
+  (if (open-network-stream (concat "esb-" host ":" (number-to-string port))
+                           buf host port)
+      (message "extempore slave buffer: sucessfully opened slave buffer on %s:%s" host port)
+    (message "extempore slave buffer: couldn't connect to %s:%s" host port)))
+
+(defun extempore-slave-buffer-start-timer (buf time-interval)
+  (run-with-timer 0 time-interval #'extempore-slave-buffer-sync-slave-buffer buf))
+
 (defun extempore-slave-buffer-push-current-buffer (host port)
   (interactive
    (let ((read-host (ido-completing-read
@@ -1599,15 +1609,9 @@ buffer."
                       nil nil nil nil
                       (number-to-string extempore-slave-buffer-server-port)))))
      (list read-host read-port)))
-  (if (open-network-stream (concat "esb-" host ":" (number-to-string port))
-                           (current-buffer)
-                           host
-                           port)
-      (progn (message "extempore slave buffer: sucessfully opened slave buffer on %s:%s" host port)
-             (run-with-timer 0
-                             extempore-slave-buffer-refresh-interval
-                             #'extempore-slave-buffer-sync-buffer
-                             (current-buffer)))))
+  (extempore-slave-buffer-setup-buffer (current-buffer host port))
+  (extempore-slave-buffer-start-timer
+   (current-buffer extempore-slave-buffer-refresh-interval)))
 
 (provide 'extempore)
 
