@@ -1530,9 +1530,11 @@ buffer."
   (message "extempore server: %s" str))
 
 (defun extempore-slave-buffer-setup-proc (proc buffer-name)
-  (let ((buf (get-buffer-create (concat " " buffer-name))))
+  (let ((buf (get-buffer-create buffer-name)))
     (set-process-buffer proc buf)
-    (with-current-buffer buf (read-only-mode 1))
+    (with-current-buffer buf
+      (buffer-disable-undo)
+      (read-only-mode 1))
     (message "extempore slave buffer set up: %s" buffer-name)))
 
 (defun extempore-slave-buffer-update-slave (buf buffer-text start-pos)
@@ -1547,7 +1549,7 @@ buffer."
 (defun extempore-slave-buffer-server-filter (proc str)
   (let ((request-list (read str))
         (proc-buf (process-buffer proc)))    
-    (cond ((not (= (length request-list) 2))
+    (cond ((not (= (length request-list) 3))
            (message "Error: malformed buffer state recieved from master buffer."))
           ((null proc-buf)
            (extempore-slave-buffer-setup-proc proc (car request-list))
@@ -1563,13 +1565,15 @@ buffer."
 
 (defun extempore-slave-buffer-sync-buffer (buf)
   (with-current-buffer buf
-    (process-send-string (get-buffer-process buf)
-                         (prin1-to-string
-                          (list (buffer-name)
-                                (buffer-substring-no-properties (point-min) (point-max))
-                               (window-start))))))
+    (let ((proc (get-buffer-process buf)))
+      (if proc
+          (process-send-string proc
+                               (prin1-to-string
+                                (list (buffer-name)
+                                      (buffer-substring-no-properties (point-min) (point-max))
+                                      (window-start))))))))
 
-(defvar extempore-slave-buffer-refresh-interval 1.0
+(defvar extempore-slave-buffer-refresh-interval 5.0
   "The refresh interval (in seconds) for syncing the slave buffers")
 
 (defun extempore-slave-buffer-push-current-buffer-to-slave (host port)
