@@ -1499,6 +1499,7 @@ buffer."
       (progn (delete-process extempore-slave-buffer-server)
              (setq extempore-slave-buffer-server nil)
              (cancel-function-timers #'extempore-slave-buffer-sync-buffer)
+             (extempore-slave-buffer-delete-all-connections)
              (message "Stopping the slave buffer server."))))
 
 (defun extempore-slave-buffer-start (port)
@@ -1526,11 +1527,16 @@ buffer."
     (message "Error: couldn't start the slave buffer server.")
     extempore-slave-buffer-server))
 
-(defun extempore-cleanup-slave-connections ()
+(defun extempore-slave-buffer-cleanup-dead-connections ()
   (dolist (proc (process-list))
     (if (string= (substring (process-name proc) 0 4) "esb-")
       (unless (member (process-status proc) '(run open))
         (delete-process proc)))))
+
+(defun extempore-slave-buffer-delete-all-connections ()
+  (dolist (proc (process-list))
+    (if (string= (substring (process-name proc) 0 4) "esb-")
+      (delete-process proc))))
 
 (defun extempore-slave-buffer-server-sentinel (proc str)
   (message "extempore server: %s" str))
