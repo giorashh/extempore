@@ -1556,7 +1556,7 @@ buffer."
       (let ((inhibit-read-only t))
         (delete-region (point-min) (point-max))
         (insert buffer-text))
-      (if (eq buf curr-buf)
+      (if (not (eq buf curr-buf))
           (set-window-start (get-buffer-window buf) start-pos)))))
 
 (defun extempore-slave-buffer-server-filter (proc str)
@@ -1586,7 +1586,7 @@ buffer."
                                       (buffer-substring-no-properties (point-min) (point-max))
                                       (window-start))))))))
 
-(defvar extempore-slave-buffer-refresh-interval 5.0
+(defvar extempore-slave-buffer-refresh-interval 0.5
   "The refresh interval (in seconds) for syncing the slave buffers")
 
 (defun extempore-slave-buffer-setup-buffer (buf host port)
@@ -1609,9 +1609,9 @@ buffer."
                       nil nil nil nil
                       (number-to-string extempore-slave-buffer-server-port)))))
      (list read-host read-port)))
-  (extempore-slave-buffer-setup-buffer (current-buffer host port))
+  (extempore-slave-buffer-setup-buffer (current-buffer) host port)
   (extempore-slave-buffer-start-timer
-   (current-buffer extempore-slave-buffer-refresh-interval)))
+   (current-buffer) extempore-slave-buffer-refresh-interval))
 
 (provide 'extempore)
 
