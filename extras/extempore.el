@@ -1469,8 +1469,130 @@ You shouldn't have to modify this list directly, use
 ;; slave-buffer minor mode ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-minor-mode extempore-slave-buffer-mode
+  "This minor allows emacs to create a 'slave' buffer on
+another (potentially remote) emacs instance.
 
+This read-only slave buffer will stay in sync with the master,
+showing the text and current window position of the 'master'
+buffer."
+  
+  :global t
+  :init-value nil
+  :lighter " ExSlave"
+  :keymap nil
+  :group 'extempore
+
+  (if extempore-slave-buffer-mode
+      (call-interactively #'extempore-slave-buffer-start)
+    (extempore-slave-buffer-stop)))
+
+(defvar extempore-slave-buffer-server nil)
+
+(defcustom extempore-slave-buffer-server-port 7096
+  "Port for the the extempore 'slave buffer' server."
+  :type 'integer
+  :group 'extempore)
+
+(defun extempore-slave-buffer-stop ()
+  (if extempore-slave-buffer-server
+      (progn (delete-process extempore-slave-buffer-server)
+             (setq extempore-slave-buffer-server nil)
+             (message "Stopping the slave buffer server."))))
+
+(defun extempore-slave-buffer-start (port)
+  (interactive
+   (list (string-to-number
+          (ido-completing-read "Port: "
+                               (list (number-to-string extempore-slave-buffer-server-port))
+                               nil nil nil nil
+                               (number-to-string extempore-slave-buffer-server-port)))))
+  (extempore-slave-buffer-stop)
+  (extempore-slave-buffer-create-server port)
+  (message "Starting 'slave buffer' server."))
+
+(defun extempore-slave-buffer-create-server (port)
+  (setq extempore-slave-buffer-server
+        (make-network-process
+         :name "extempore-slave-buffer-server"
+         ;; :buffer (current-buffer)
+         :coding 'iso-latin-1
+         :service port
+         :family 'ipv4
+         :server t
+         :filter #'extempore-slave-buffer-server-filter))
+  (unless extempore-slave-buffer-server
+    (message "Error: couldn't start the slave buffer server.")
+    extempore-slave-buffer-server))
+
+(defun extempore-slave-buffer-server-sentinel (proc str)
+  (message "extempore server: %s" str))
+
+(defun extempore-slave-buffer-setup-proc (proc buffer-name)
+  (let ((buf (get-buffer-create (concat " " buffer-name))))
+    (set-process-buffer proc buf)
+    (with-current-buffer buf (read-only-mode 1))
+    (message "extempore slave buffer set up: %s" buffer-name)))
+
+(defun extempore-slave-buffer-update-slave (buf buffer-text start-pos)
+  (let ((curr-buf (current-buffer)))
+    (with-current-buffer buf
+      (let ((inhibit-read-only t))
+        (delete-region (point-min) (point-max))
+        (insert buffer-text))
+      (if (not (eq buf curr-buf))
+          (set-window-start start-pos)))))
+
+(defun extempore-slave-buffer-server-filter (proc str)
+  (let ((request-list (read str))
+        (proc-buf (process-buffer proc)))    
+    (cond ((not (= (length request-list) 2))
+           (message "Error: malformed buffer state recieved from master buffer."))
+          ((null proc-buf)
+           (extempore-slave-buffer-setup-proc proc (car request-list))
+           (extempore-slave-buffer-update-slave proc-buf
+                                                (cadr request-list)
+                                                (caddr request-list)))
+          ((string= (buffer-name proc-buf)
+                    (car request-list))
+           (extempore-slave-buffer-update-slave proc-buf
+                                                (cadr request-list)
+                                                (caddr request-list)))
+          (t (message "extempore slave buffer mode: received state from wrong buffer.")))))
+
+(defun extempore-slave-buffer-sync-buffer (buf)
+  (with-current-buffer buf
+    (process-send-string (get-buffer-process buf)
+                         (prin1-to-string
+                          (list (buffer-name)
+                                (buffer-substring-no-properties (point-min) (point-max))
+                               (window-start))))))
+
+(defvar extempore-slave-buffer-refresh-interval 1.0
+  "The refresh interval (in seconds) for syncing the slave buffers")
+
+(defun extempore-slave-buffer-push-current-buffer-to-slave (host port)
+  (interactive
+   (let ((read-host (ido-completing-read
+                     "Hostname: " (list "localhost") nil nil nil nil "localhost"))
+         (read-port (string-to-number
+                     (ido-completing-read
+                      "Port: "
+                      (number-to-string extempore-slave-buffer-server-port)
+                      nil nil nil nil
+                      (number-to-string extempore-slave-buffer-server-port)))))
+     (list read-host read-port)))
+  (if (open-network-stream (concat "esb-" host ":" (number-to-string port))
+                           (current-buffer)
+                           host
+                           port)
+      (progn (message "extempore slave buffer: sucessfully opened slave buffer on %s:%s" host port)
+             (run-with-timer 0
+                             extempore-slave-buffer-refresh-interval
+                             #'extempore-slave-buffer-sync-buffer
+                             (current-buffer)))))
 
 (provide 'extempore)
 
 ;;; extempore.el ends here
+
