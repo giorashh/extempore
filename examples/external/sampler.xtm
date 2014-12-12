@@ -26,8 +26,8 @@
 (bind-func dsp:DSP
   (lambda (in time chan dat)
     (cond ((< chan 2.0)
-	   (sampler in time chan dat))
-	  (else 0.0))))
+           (sampler in time chan dat))
+          (else 0.0))))
 
 (dsp:set! dsp)
 
@@ -70,7 +70,7 @@
 ;; Now, let's load a whole 'instrument' worth of samples in to the sampler.
 ;; There are lots of sample libraries available on the net these days,
 ;; both free ones and ones that cost money.  There are some good free
-;; piano samples avaliable at 
+;; piano samples avaliable at
 ;; http://theremin.music.uiowa.edu/MISpiano.html
 
 ;; Now, you can load the samples for each individual note in manually,
@@ -114,9 +114,9 @@
              (if (null? result)
                  (begin (println 'Error: 'cannot 'parse 'filename: fname)
                         #f)
-                 (list fname                                    ; filename                   
-                       (note-name-to-midi-number (cadr result)) ; midi note number           
-                       0                                        ; offset                     
+                 (list fname                                    ; filename
+                       (note-name-to-midi-number (cadr result)) ; midi note number
+                       0                                        ; offset
                        0))))                                    ; length (0 for whole sample)
          file-list)))
 
@@ -190,8 +190,8 @@
 (bind-func dsp:DSP
   (lambda (in time chan dat)
     (cond ((< chan 2.0) (+ (sampler in time chan dat)
-			   (sampler2 in time chan dat)
-			   (sampler3 in time chan dat)))
-	  (else 0.0))))
+                           (sampler2 in time chan dat)
+                           (sampler3 in time chan dat)))
+          (else 0.0))))
 
 ;; load new samplers etc..

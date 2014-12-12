@@ -6,7 +6,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -63,8 +63,8 @@
 (bind-func print_audio_file_info
   (lambda (fname)
     (let ((info:sf_info* (zalloc))
-	  (audiofile (sf_open fname 16 info))
-	  (channels (i32toi64 (tref info 2))))
+          (audiofile (sf_open fname 16 info))
+          (channels (i32toi64 (tref info 2))))
       (printf "---------------\n")
       (printf "filename:    %s\n" fname)
       (printf "samplerate:  %d\n" (tref info 1))
@@ -72,19 +72,19 @@
       (printf "frames:      %lld\n" (tref info 0))
       (printf "seconds:     %f\n"
       	      (/ (i64tod (/ (tref info 0) (i32toi64 (tref info 2))))
-      		 (i32tod (tref info 1))))
+                 (i32tod (tref info 1))))
       (sf_close audiofile))))
 
 ;; an audio buffer reader
 (bind-func read_audio_data
   (lambda (fname dat offset num)
     (let ((info:sf_info* (zalloc))
-	  (audiofile (sf_open fname 16 info))
-	  (channels (i32toi64 (tref info 2)))
-	  (num_to_read (* num channels))
-	  (num_to_offset (* offset channels))
-	  (cnt (sf_seek audiofile num_to_offset 0))
-	  (samples_read (sf_read_double audiofile dat num_to_read)))
+          (audiofile (sf_open fname 16 info))
+          (channels (i32toi64 (tref info 2)))
+          (num_to_read (* num channels))
+          (num_to_offset (* offset channels))
+          (cnt (sf_seek audiofile num_to_offset 0))
+          (samples_read (sf_read_double audiofile dat num_to_read)))
       (if (<> null audiofile)
           (begin
             (printf "---------------\n")
@@ -100,13 +100,13 @@
   (lambda (fname offset num)
     (let ((info:sf_info* (zalloc))
           (audio_file (sf_open fname 16 info))
-	  (channels (sf_channels info))
+          (channels (sf_channels info))
           (buffer_len (* channels (sf_frames info)))
-	  (audio_dat (zalloc buffer_len))
-	  (num_to_read (if (= 0 num) buffer_len (* num channels)))
-	  (num_to_offset (* offset channels))
-	  (cnt (sf_seek audio_file num_to_offset 0))
-	  (samples_read (sf_read_double audio_file audio_dat num_to_read))
+          (audio_dat (zalloc buffer_len))
+          (num_to_read (if (= 0 num) buffer_len (* num channels)))
+          (num_to_offset (* offset channels))
+          (cnt (sf_seek audio_file num_to_offset 0))
+          (samples_read (sf_read_double audio_file audio_dat num_to_read))
           (playhead 0))
       (if (<> null audio_file)
           (begin
@@ -130,13 +130,13 @@
   (lambda (fname offset num)
     (let ((info:sf_info* (zalloc))
           (audio_file (sf_open fname 16 info))
-	  (channels (sf_channels info))
+          (channels (sf_channels info))
           (buffer_len (* channels (sf_frames info)))
-	  (audio_dat (zalloc buffer_len))
-	  (num_to_read (if (= 0 num) buffer_len (* num channels)))
-	  (num_to_offset (* offset channels))
-	  (cnt (sf_seek audio_file num_to_offset 0))
-	  (samples_read (sf_read_double audio_file audio_dat num_to_read))
+          (audio_dat (zalloc buffer_len))
+          (num_to_read (if (= 0 num) buffer_len (* num channels)))
+          (num_to_offset (* offset channels))
+          (cnt (sf_seek audio_file num_to_offset 0))
+          (samples_read (sf_read_double audio_file audio_dat num_to_read))
           (playhead 0))
       (if (<> null audio_file)
           (begin
@@ -164,11 +164,11 @@
       (tset! info 2 channels)
       (tset! info 3 (+ 131072 2)) ;; + 6 for 32 bit float (+ 2 for 16 bit signed)
       (let ((audiofile (sf_open fname 32 info))
-	    (samples_written (sf_write_double audiofile
+            (samples_written (sf_write_double audiofile
                                               dat
                                               (* (i32toi64 channels) frames))))
-	(if (null? audiofile)
-	    (printf "error writing file: %s\n" (sf_strerror audiofile)))
-	(sf_write_sync audiofile)
-	(sf_close audiofile)
-	samples_written))))
+        (if (null? audiofile)
+            (printf "error writing file: %s\n" (sf_strerror audiofile)))
+        (sf_write_sync audiofile)
+        (sf_close audiofile)
+        samples_written))))

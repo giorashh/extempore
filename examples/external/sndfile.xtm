@@ -30,12 +30,12 @@
 (bind-func read_audio_file
   (lambda (fname dat offset num)
     (let ((info:<i64,i32,i32,i32,i32,i32>* (zalloc))
-	  (audiofile (sf_open fname 16 info))
-	  (channels (i32toi64 (tref info 2)))
-	  (num_to_read (* num channels))
-	  (num_to_offset (* offset channels))
-	  (cnt (sf_seek audiofile num_to_offset 0))
-	  (samples_read (sf_read_double audiofile dat num_to_read)))
+          (audiofile (sf_open fname 16 info))
+          (channels (i32toi64 (tref info 2)))
+          (num_to_read (* num channels))
+          (num_to_offset (* offset channels))
+          (cnt (sf_seek audiofile num_to_offset 0))
+          (samples_read (sf_read_double audiofile dat num_to_read)))
       (if (<> null audiofile)
           (begin
             (printf "file name: %s\n" fname)
@@ -49,7 +49,7 @@
 ;; the (string) path to the audio file
 
 (bind-func create_audio_closure
-  (lambda (fname)    
+  (lambda (fname)
     (let ((len 40.0)
           (offset 0.0)
           (adat:double* (zalloc (* 44100 2 (dtoi64 len))))
@@ -69,7 +69,7 @@
         (audio_data (audio_closure)))
     (lambda (in time chan dat)
       (let ((pos (modulo time (* 40.0 44100.0))))
-	(pref audio_data (dtoi64 (+ chan (* 2.0 pos))))))))
+        (pref audio_data (dtoi64 (+ chan (* 2.0 pos))))))))
 
 (dsp:set! dsp)
 
@@ -86,7 +86,7 @@
         (audio_data (audio_closure)))
     (lambda (in time chan dat)
       (let ((pos (modulo time (* 40.0 44100.0))))
-	(pref audio_data (dtoi64 (+ chan 
+        (pref audio_data (dtoi64 (+ chan
                                     (* 2.0 (+ pos
                                               (* 2.0 ; amplitude
                                                  (cos (* TWOPI 5.0 ; frequency

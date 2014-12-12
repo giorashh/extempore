@@ -12,13 +12,13 @@
 
 (define gliblib
   (sys:open-dylib (if (string=? "Linux" (sys:platform))
-		      "libglib-2.0.so"
-		      (if (string=? "Windows" (sys:platform))
-			  "libglib-2.0-0.dll"
-			  "libglib-2.0.dylib"))))
+                      "libglib-2.0.so"
+                      (if (string=? "Windows" (sys:platform))
+                          "libglib-2.0-0.dll"
+                          "libglib-2.0.dylib"))))
 
 (if (or (eq? #f gliblib)
-	(not gliblib)) 
+        (not gliblib))
     (print-error "Could not load 'glib' dynamic library"))
 
 ;; (define giolib
@@ -29,19 +29,19 @@
 ;; 			  "libgio-2.0.dylib"))))
 
 ;; (if (or (eq? #f giolib)
-;; 	(not giolib)) 
+;; 	(not giolib))
 ;;     (print-error "Could not load 'gio' dynamic library"))
 
 
 (define gobjectlib
   (sys:open-dylib (if (string=? "Linux" (sys:platform))
-		      "libgobject-2.0.so"
-		      (if (string=? "Windows" (sys:platform))
-			  "libgobject-2.0-0.dll"
-			  "libgobject-2.0.dylib"))))
+                      "libgobject-2.0.so"
+                      (if (string=? "Windows" (sys:platform))
+                          "libgobject-2.0-0.dll"
+                          "libgobject-2.0.dylib"))))
 
 (if (or (eq? #f gobjectlib)
-	(not gobjectlib)) 
+        (not gobjectlib))
     (print-error "Could not load 'gio' dynamic library"))
 
 
@@ -70,7 +70,7 @@
 (bind-alias gboolean i1) ;; WARNING GLib defines this as i32
 (bind-alias GQuark i32)
 (bind-alias GRegexMatchFlags i32)
-;(bind-alias GObject i8) ;; opaque struct
+                                        ;(bind-alias GObject i8) ;; opaque struct
 (bind-alias GObjectClass i8) ;; opaque struct
 (bind-alias GObjectConstructParam i8) ;; opaque struct
 (bind-alias GType i64)
@@ -81,7 +81,7 @@
 (if (= 64 (sys:pointer-size))
     (bind-alias gsize i64)
     (bind-alias gsize i32))
-;(bind-alias GValue i8) ;; opaque struct
+                                        ;(bind-alias GValue i8) ;; opaque struct
 (bind-alias GMainLoop i8) ;; opaque struct
 (bind-alias GCallback [void]*) ;; callback
 (bind-alias GFreeFunc [void,gpointer]*)
@@ -104,7 +104,7 @@
       (bind-lib gliblib g_get_real_name_utf8 [gchar*]*)
       (bind-lib gliblib g_get_host_name [gchar*]*)
       (bind-lib gliblib g_get_home_dir_utf8 [gchar*]*)
-      ;(bind-lib gliblib g_get_environ [gchar**]*)
+                                        ;(bind-lib gliblib g_get_environ [gchar**]*)
       (bind-lib gliblib g_getenv_utf8 [gchar*,gchar*]*)
       (bind-lib gliblib g_setenv_utf8 [gboolean,gchar*]*)
       (bind-lib gliblib g_unsetenv_utf8 [void,gchar*]*)
@@ -129,7 +129,7 @@
 (bind-val G_FILE_TEST_EXISTS i32 16)
 
 (if (string=? "Windows" (sys:platform))
-    (begin 
+    (begin
       (bind-lib gliblib g_file_test_utf8 [gboolean,gchar*,i32]*)
       (bind-lib gliblib g_dir_open_utf8 [GDir*,gchar*,guint,GError**]*)
       (bind-lib gliblib g_dir_close [void,GDir*]*)

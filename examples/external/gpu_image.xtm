@@ -8,9 +8,9 @@
 (load "libs/external/opengl.xtm")
 
 ;; must create openglview before calling gl_load_extensions
-;(define pr2 (gl:make-ctx ":0.0" #t 0.0 0.0 900.0 600.0))
+                                        ;(define pr2 (gl:make-ctx ":0.0" #t 0.0 0.0 900.0 600.0))
 (define pr2 (gl:make-ctx ":0.0" #t 0.0 0.0 (* 3.0 1920.0) 1080.0))
-;(gl_set_view 900.0 600.0)
+                                        ;(gl_set_view 900.0 600.0)
 
 (bind-func gl_set_view_ext
   (lambda (w:double h:double fov:double depth:double)
@@ -23,8 +23,8 @@
     (gl_setup)
     1))
 
-;(gl_set_view_ext (* 3.0 1920.0) 1080.0 55.0 2000.0)
-;(gl_set_view_ext (* 3.0 1920.0) 1080.0 35.0 2000.0)
+                                        ;(gl_set_view_ext (* 3.0 1920.0) 1080.0 55.0 2000.0)
+                                        ;(gl_set_view_ext (* 3.0 1920.0) 1080.0 35.0 2000.0)
 (gl_set_view_ext (* 3.0 1920.0) 1080.0 21.24 (* 3.0 1920.0))
 
 (define scr-width (* 3.0 1920.0))
@@ -71,10 +71,10 @@
   (lambda (key:i8* dict:list* val:double*)
     (let ((e:<i8*,double>* (car dict)))
       (if (null? e)
-	  0
-	  (if (= (strcmp (tref e 0) key) 0)
-	      (begin (pset! val 0 (tref e 1)) 1)
-	      (value_for_key key (cdr dict) val))))))
+          0
+          (if (= (strcmp (tref e 0) key) 0)
+              (begin (pset! val 0 (tref e 1)) 1)
+              (value_for_key key (cdr dict) val))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -91,9 +91,9 @@
   (lambda (address:i8* types:i8* args:i8*)
     (let ((data (bitcast args i32*)))
       (printf "address:%s  type:%s arg1:%f arg2:%lld\n"
-	      address types
-	      (ftod (unswap32f (pref data 0)))
-	      (unswap32i (pref data 1))))))
+              address types
+              (ftod (unswap32f (pref data 0)))
+              (unswap32i (pref data 1))))))
 
 
 
@@ -104,13 +104,13 @@
 
 ;; need two fbos so we can keep swapping
 ;; the input and output of shaders
-;(define fbotex1 (create-texture 900 600))
-;(define fbodepth1 (create-depth-buffer 900 600))
-;(define fbo1 (create-fbo fbotex1 fbodepth1 900 600))
+                                        ;(define fbotex1 (create-texture 900 600))
+                                        ;(define fbodepth1 (create-depth-buffer 900 600))
+                                        ;(define fbo1 (create-fbo fbotex1 fbodepth1 900 600))
 (define fbo1 (create-fbo (real->integer scr-width) (real->integer scr-height)))
 
-;(define fbotex2 (create-texture 900 600))
-;(define fbodepth2 (create-depth-buffer 900 600))
+                                        ;(define fbotex2 (create-texture 900 600))
+                                        ;(define fbodepth2 (create-depth-buffer 900 600))
 (define fbo2 (create-fbo (real->integer scr-width) (real->integer scr-height)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -122,16 +122,16 @@
 (bind-func set_grid_offsets
   (lambda (width:float height:float factor:float)
     (let ((xinc:float (/ factor width))
-	  (yinc:float (/ factor height))
-	  (i 0) (j 0))
+          (yinc:float (/ factor height))
+          (i 0) (j 0))
       (dotimes (i 5) ;; columns
-	(dotimes (j 5) ;; rows
-	  (pset! gridoffsets (+ (* (+ (* i 5) j) 2) 0)
-		 (+ (* -2.0 xinc)
-		    (* (i32tof i) xinc)))
-	  (pset! gridoffsets (+ (* (+ (* i 5) j) 2) 1)
-		 (+ (* -2.0 xinc)
-		    (* (i32tof i) yinc)))))
+        (dotimes (j 5) ;; rows
+          (pset! gridoffsets (+ (* (+ (* i 5) j) 2) 0)
+                 (+ (* -2.0 xinc)
+                    (* (i32tof i) xinc)))
+          (pset! gridoffsets (+ (* (+ (* i 5) j) 2) 1)
+                 (+ (* -2.0 xinc)
+                    (* (i32tof i) yinc)))))
       void)))
 
 
@@ -142,36 +142,36 @@
 (bind-func gl_loop
   (let ((cnt 0.0))
     (lambda (img:i32
-	     fbo1:E_fbo* fbo2:E_fbo*
-	     s1:i32 s2:i32 s3:i32 s4:i32 s5:i32)
+             fbo1:E_fbo* fbo2:E_fbo*
+             s1:i32 s2:i32 s3:i32 s4:i32 s5:i32)
       (glClearColor 0.0 0.0 1.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
       (set! cnt (+ cnt 5.0))
-      
+
       (glLoadIdentity)
-      ;(gl_look_at 0.0 0.0 (+ 1000.0 (* 100.0 (cos (* cnt .01)))) 0.0 0.0 0.0 0.0 1.0 0.0)
-      ;(gl_look_at 0.0 0.0 1300.0 0.0 0.0 0.0 0.0 1.0 0.0)
-      ;(gl_look_at 0.0 0.0 1037.0 0.0 0.0 0.0 0.0 1.0 0.0)
-      (gl_look_at 0.0 0.0 2880.0 0.0 0.0 0.0 0.0 1.0 0.0)                        
-      
-      ;(set_grid_offsets 1.0 1.0 1.0) ;(* 2.0 (dtof (cos (* .00005 (i64tod (now)))))))
+                                        ;(gl_look_at 0.0 0.0 (+ 1000.0 (* 100.0 (cos (* cnt .01)))) 0.0 0.0 0.0 0.0 1.0 0.0)
+                                        ;(gl_look_at 0.0 0.0 1300.0 0.0 0.0 0.0 0.0 1.0 0.0)
+                                        ;(gl_look_at 0.0 0.0 1037.0 0.0 0.0 0.0 0.0 1.0 0.0)
+      (gl_look_at 0.0 0.0 2880.0 0.0 0.0 0.0 0.0 1.0 0.0)
+
+                                        ;(set_grid_offsets 1.0 1.0 1.0) ;(* 2.0 (dtof (cos (* .00005 (i64tod (now)))))))
       (set_grid_offsets 1.0 1.0 (* 2.0 (dtof (cos (* .00002 (i64tod (now)))))))
-      
+
       ;; shader pass 1
-      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo1 0))    
-      (glUseProgram s1)            
+      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo1 0))
+      (glUseProgram s1)
       (glActiveTexture GL_TEXTURE0)
       (glUniform2fv (glGetUniformLocation s1 "texoffset") 25 gridoffsets)
       (glUniform1i (glGetUniformLocation s1 "tex1") 0)
       (glClearColor 0.0 1.0 0.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
       ;; (gl_draw_img_from_img
-      ;;  (modulo cnt 9000.0) 0.0       
+      ;;  (modulo cnt 9000.0) 0.0
       ;;  scr_width 512.0
       ;;  (* scr_width -0.5) (* scr_height -0.5)
-      ;;  (* 1.0 scr_width) (* 1.0 scr_height) 0.0 img)      
+      ;;  (* 1.0 scr_width) (* 1.0 scr_height) 0.0 img)
       (gl_draw_img_from_img
-       (modulo cnt 9000.0) 0.0       
+       (modulo cnt 9000.0) 0.0
        scr_width 170.6
        (* scr_width -0.5) (* scr_height -0.5)
        (* 1.0 scr_width) (* 0.3333333 scr_height) 0.0 img)
@@ -181,43 +181,43 @@
        (* scr_width -0.5) (+ (* scr_height -0.5) (* 0.3333333 scr_height))
        (* 1.0 scr_width) (* 0.3333333 scr_height) 0.0 img)
       (gl_draw_img_from_img
-       (modulo (* 1.2 cnt) 9000.0) 341.2       
+       (modulo (* 1.2 cnt) 9000.0) 341.2
        scr_width 170.6
        (* scr_width -0.5) (+ (* scr_height -0.5) (* 0.6666666 scr_height))
-       (* 1.0 scr_width) (* 0.3333333 scr_height) 0.0 img)            
-      (glBindFramebuffer GL_FRAMEBUFFER 0)   
+       (* 1.0 scr_width) (* 0.3333333 scr_height) 0.0 img)
+      (glBindFramebuffer GL_FRAMEBUFFER 0)
       (glUseProgram 0)
-      
+
       ;; shader pass 2
-      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo2 0))    
-      (glUseProgram s2)     
+      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo2 0))
+      (glUseProgram s2)
       (glActiveTexture GL_TEXTURE0)
       (glUniform2fv (glGetUniformLocation s2 "texoffset") 25 gridoffsets)
       (glUniform1i (glGetUniformLocation s2 "tex1") 0)
-      (glClearColor 1.0 0.0 0.0 1.0)      
+      (glClearColor 1.0 0.0 0.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
       (gl_draw_img (* scr_width -0.5) (* scr_height -0.5)
-      		   scr_width scr_height 0.0 (tref fbo1 1))
-      ;(gl_draw_img -450.0 -300.0 900.0 600.0 0.0 (tref fbo1 1))
+                   scr_width scr_height 0.0 (tref fbo1 1))
+                                        ;(gl_draw_img -450.0 -300.0 900.0 600.0 0.0 (tref fbo1 1))
       (glBindFramebuffer GL_FRAMEBUFFER 0)
       (glUseProgram 0)
 
       ;; shader pass 3
-      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo1 0))    
+      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo1 0))
       (glUseProgram s3)
       (glActiveTexture GL_TEXTURE0)
       (glUniform2fv (glGetUniformLocation s3 "texoffset") 25 gridoffsets)
       (glUniform1i (glGetUniformLocation s3 "tex1") 0)
-      (glClearColor 0.0 1.0 1.0 1.0)      
+      (glClearColor 0.0 1.0 1.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
       (gl_draw_img (* scr_width -0.5) (* scr_height -0.5)
-      		   scr_width scr_height 0.0 (tref fbo2 1))      
-      ;(gl_draw_img -450.0 -300.0 900.0 600.0 0.0 (tref fbo2 1))
+                   scr_width scr_height 0.0 (tref fbo2 1))
+                                        ;(gl_draw_img -450.0 -300.0 900.0 600.0 0.0 (tref fbo2 1))
       (glBindFramebuffer GL_FRAMEBUFFER 0)
       (glUseProgram 0)
 
       ;; shader pass 4
-      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo2 0))    
+      (glBindFramebuffer GL_FRAMEBUFFER (tref fbo2 0))
       (glUseProgram s4)
       (glActiveTexture GL_TEXTURE0)
       (glUniform2fv (glGetUniformLocation s4 "texoffset") 25 gridoffsets)
@@ -225,37 +225,37 @@
       (glClearColor 1.0 1.0 0.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
       (gl_draw_img (* scr_width -0.5) (* scr_height -0.5)
-      		   scr_width scr_height 0.0 (tref fbo1 1))      
-      ;(gl_draw_img -450.0 -300.0 900.0 600.0 0.0 (tref fbo1 1))
+                   scr_width scr_height 0.0 (tref fbo1 1))
+                                        ;(gl_draw_img -450.0 -300.0 900.0 600.0 0.0 (tref fbo1 1))
       (glBindFramebuffer GL_FRAMEBUFFER 0)
       (glUseProgram 0)
-      
+
       ;; shader output pass (i.e. don't draw output to an fbo)
       (glUseProgram s5)
       (glUniform2fv (glGetUniformLocation s5 "texoffset") 25 gridoffsets)
       (glUniform1i (glGetUniformLocation s5 "tex1") 0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
-      
+
       (gl_draw_img (* scr_width -0.5) (* scr_height -0.5) scr_width scr_height 0.0 (tref fbo2 1))
-      
+
       ;; (gl_draw_img_from_img
       ;;  (+ 1000.0 (* 1000.0 (cos (* .001 cnt)))) 0.0 ;(modulo cnt 10000.0) 0.0
       ;;  scr_width 512.0
       ;;  (* scr_width -0.5) (* scr_height -0.5)
       ;;  scr_width scr_height 0.0 img)
-      
+
 
       ;; (gl_draw_img_b 0.0 0.0 ;(modulo cnt 10000.0) 0.0
       ;; 		     3000.0 512.0
       ;; 		     (* scr_width -0.5) (* scr_height -0.5)
       ;; 		     scr_width scr_height 0.0 img)
-      
+
 
       ;; (gl_draw_img_b (modulo cnt 10000.0) 0.0
       ;; 		     scr_width 512.0
       ;; 		     (* scr_width -0.5) (* scr_height -0.5)
       ;; 		     scr_width scr_height 0.0 img)
-      
+
 
       (glFlush))))
 
@@ -264,15 +264,15 @@
 (define opengl-test
   (lambda (time degree) ; distance)
     (if (< time (now))
-	(println 'im-late))
+        (println 'im-late))
     (define tt (now))
     (define distance 80.0)
     (gl_loop myimg fbo1 fbo2
-	     *shader1* *shader2* *shader3* *shader4* *shader5*)
+             *shader1* *shader2* *shader3* *shader4* *shader5*)
     (gl:swap-buffers pr2)
     (callback (+ time 200) 'opengl-test (+ time 600) (+ degree 0.01)))) ; distance)))
 
-      		 		 	
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; shaders
@@ -281,14 +281,14 @@
 
 ;; vert shader
 (define passthrough_vert
-"// VERTEX SHADER
+  "// VERTEX SHADER
 // #version 330
 
 varying vec2 TexCoord;
- 
-void main() {   
+
+void main() {
    // pass through texture coordinate
-   //TexCoord =  gl_TextureMatrix[0].st * gl_MultiTexCoord0.st;   
+   //TexCoord =  gl_TextureMatrix[0].st * gl_MultiTexCoord0.st;
    TexCoord = gl_MultiTexCoord0.st;
    gl_FrontColor = gl_Color;
    gl_Position = ftransform();
@@ -297,7 +297,7 @@ void main() {
 
 ;; frag shader
 (define passthrough_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 #extension GL_ARB_texture_rectangle : enable
 
@@ -313,7 +313,7 @@ void main() {
 
 ;; frag shader
 (define greyscale_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -332,7 +332,7 @@ void main() {
 
 ;; sepia
 (define sepia_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -350,7 +350,7 @@ void main() {
 
 
 (define invert_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -368,7 +368,7 @@ void main() {
 
 
 (define gaussian_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -386,7 +386,7 @@ void main() {
       // Sample a grid around and including our texel
       sample[i] = texture2DRect(tex1, TexCoord + texoffset[i]);
    }
- 
+
    gl_FragColor = ((1.0  * (sample[0] + sample[4]  + sample[20] + sample[24])) +
 	           (4.0  * (sample[1] + sample[3]  + sample[5]  + sample[9] + sample[15] + sample[19] + sample[21] + sample[23])) +
 	           (7.0  * (sample[2] + sample[10] + sample[14] + sample[22])) +
@@ -400,7 +400,7 @@ void main() {
 
 ;;  Blur (median filter)
 (define blur_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -413,20 +413,20 @@ varying vec2 TexCoord;
 
 void main() {
    gl_FragColor = vec4(0.0);
- 
+
    for (int i = 0; i < 25; i++)
    {
       // Sample a grid around and including our texel
       gl_FragColor += texture2DRect(tex1, TexCoord + texoffset[i]);
    }
- 
+
    gl_FragColor /= 25.0;
 }")
 
 
 ;;  sharpen
 (define sharpen_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -439,15 +439,15 @@ varying vec2 TexCoord;
 
 void main() {
     vec4 sample[25];
- 
+
     for (int i = 0; i < 25; i++)
     {
        // Sample a grid around and including our texel
        sample[i] = texture2DRect(tex1, TexCoord + texoffset[i]);
     }
-  
+
     gl_FragColor = 25.0 * sample[12];
- 
+
     for (int i = 0; i < 25; i++)
     {
        if (i != 12)
@@ -456,7 +456,7 @@ void main() {
 }")
 
 (define dilate_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -467,25 +467,25 @@ uniform vec2      texoffset[25];
 
 varying vec2 TexCoord;
 
-void main() {  
+void main() {
    vec4 sample[25];
    vec4 maxValue = vec4(0.0);
- 
+
    for (int i = 0; i < 25; i++)
    {
       // Sample a grid around and including our texel
       sample[i] = texture2DRect(tex1, TexCoord + texoffset[i]);
- 
-      // Keep the maximum value		
+
+      // Keep the maximum value
       maxValue = max(sample[i], maxValue);
    }
- 
+
    gl_FragColor = maxValue;
 }")
 
 
 (define erode_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -499,13 +499,13 @@ varying vec2 TexCoord;
 void main() {
     vec4 sample[25];
     vec4 minValue = vec4(1.0);
- 
+
     for (int i = 0; i < 25; i++)
     {
         // Sample a grid around and including our texel
         sample[i] = texture2DRect(tex1, TexCoord + texoffset[i]);
- 
-        // Keep the minimum value		
+
+        // Keep the minimum value
         minValue = min(sample[i], minValue);
     }
     gl_FragColor = minValue;
@@ -513,7 +513,7 @@ void main() {
 
 
 (define edge_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -526,7 +526,7 @@ varying vec2 TexCoord;
 
 void main() {
     vec4 sample[25];
- 
+
     for (int i = 0; i < 25; i++)
     {
        // Sample a grid around and including our texel
@@ -534,7 +534,7 @@ void main() {
     }
 
     gl_FragColor = 24.0 * sample[12];
- 
+
     for (int i = 0; i < 25; i++)
     {
 	if (i != 12)
@@ -544,7 +544,7 @@ void main() {
 
 
 (define blend_frag
-"//  FRAGMENT SHADER
+  "//  FRAGMENT SHADER
 // #version 330
 
 #extension GL_ARB_texture_rectangle : enable
@@ -596,6 +596,6 @@ void main() {
 (define *shader3* pass_shader)
 (define *shader4* pass_shader)
 (define *shader5* pass_shader)
-;(define *shader5* sharpen_shader)
+                                        ;(define *shader5* sharpen_shader)
 
 (opengl-test (now) 0.0)

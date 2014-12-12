@@ -20,28 +20,28 @@
 ;; relative time USING adsr_accum + local mzone
 (bind-func note_c
   (lambda (start_time:double
-      freq:double
-      amp:double
-      dur:double
-      attack:double
-      decay:double
-      release:double
-      sus_amp:double
-      nstarts:double*
-      idx:i64
-      kernel:[double,double,double,double,double]*
-      notezone:mzone*)
+           freq:double
+           amp:double
+           dur:double
+           attack:double
+           decay:double
+           release:double
+           sus_amp:double
+           nstarts:double*
+           idx:i64
+           kernel:[double,double,double,double,double]*
+           notezone:mzone*)
     (let ((env (if (< (+ attack decay) dur)
-		   (adsr_accum_c 0.0 attack decay (- dur (+ attack decay)) release 1.0 sus_amp)
-		   (adsr_accum_c 0.0 0.0 0.0 dur release 1.0 sus_amp)))
-	  (t 0.0)
-	  (ff (lambda (sample:double time:double channel:double)
-		(if (< channel 1.0) (set! t (+ t 1.0)))
-		(if (< t (+ dur release))
-		    (kernel t channel freq (* (env t channel) amp))
-		    (begin (pset! nstarts idx 9999999999999.0)
-			   (llvm_zone_destroy notezone)
-			   0.0)))))
+                   (adsr_accum_c 0.0 attack decay (- dur (+ attack decay)) release 1.0 sus_amp)
+                   (adsr_accum_c 0.0 0.0 0.0 dur release 1.0 sus_amp)))
+          (t 0.0)
+          (ff (lambda (sample:double time:double channel:double)
+                (if (< channel 1.0) (set! t (+ t 1.0)))
+                (if (< t (+ dur release))
+                    (kernel t channel freq (* (env t channel) amp))
+                    (begin (pset! nstarts idx 9999999999999.0)
+                           (llvm_zone_destroy notezone)
+                           0.0)))))
       ff)))
 
 
@@ -62,14 +62,14 @@
 ;; playnote wrapper
 (define-macro (play-note time inst pitch vol dur)
   `(let ((duration (* 1.0 ,dur))
-	 (native (llvm:get-native-closure ,(symbol->string inst))))
+         (native (llvm:get-native-closure ,(symbol->string inst))))
      (if (cptr? native)
-	 (_play_note (integer->real ,time)
-		      native
-		      (midi2frq (* 1.0 ,pitch))
-		      (/ (exp (/ ,vol 26.222)) 127.0)
-		      duration)
-	 (print-error 'No 'inst 'named ,(symbol->string inst)))))
+         (_play_note (integer->real ,time)
+                     native
+                     (midi2frq (* 1.0 ,pitch))
+                     (/ (exp (/ ,vol 26.222)) 127.0)
+                     duration)
+         (print-error 'No 'inst 'named ,(symbol->string inst)))))
 
 ;; a macro for making extemore instruments
 ;; see http://benswift.me/2012-09-28-making-an-instrument.html
@@ -77,57 +77,57 @@
 (define-macro (define-instrument name note_kernel effect_kernel)
   `(bind-func ,name
      (let* ((poly:i64 48)
-	    (notes:[double,double,double,double]** (zalloc poly))
-	    (attack:double 200.0)
-	    (decay:double 200.0)
-	    (release:double 1000.0)
-	    (sustain:double 0.6) ;; amplitude of the sustain
-	    (gain 2.0)
+            (notes:[double,double,double,double]** (zalloc poly))
+            (attack:double 200.0)
+            (decay:double 200.0)
+            (release:double 1000.0)
+            (sustain:double 0.6) ;; amplitude of the sustain
+            (gain 2.0)
                                         ;(active 0)
-	    (ii 0)
-	    (note_starts:double* (zalloc poly))
-	    (new_note (lambda (start freq dur amp)
-			(let ((free_note:i64 -1)
-			      (iii 0)
-			      (i 0))
-			  (dotimes (i poly) ;; check for free poly spot           
-			    (if (> (pref note_starts i) 9999999999998.0)
-				(set! free_note i)))
-			  ;; (if (= 0 active)
-			  ;;     (begin (dotimes (iii poly)
-			  ;; 	       (pset! note_starts iii 9999999999999.0))
-			  ;; 	     (set! free_note -1)))			  
-			  (if (> free_note -1) ;; if we found a free poly spot assign a note
-			      (let ((note_zone (push_zone (* 1024 10))))
-				(pset! notes free_note
-				       (note_c start freq amp dur
-						  attack decay release sustain
-						  note_starts free_note
-						  (,note_kernel)
-						  note_zone))
-				(pset! note_starts free_note start)
-				(pop_zone)
-				1)
-			      0)))))
+            (ii 0)
+            (note_starts:double* (zalloc poly))
+            (new_note (lambda (start freq dur amp)
+                        (let ((free_note:i64 -1)
+                              (iii 0)
+                              (i 0))
+                          (dotimes (i poly) ;; check for free poly spot
+                            (if (> (pref note_starts i) 9999999999998.0)
+                                (set! free_note i)))
+                          ;; (if (= 0 active)
+                          ;;     (begin (dotimes (iii poly)
+                          ;; 	       (pset! note_starts iii 9999999999999.0))
+                          ;; 	     (set! free_note -1)))
+                          (if (> free_note -1) ;; if we found a free poly spot assign a note
+                              (let ((note_zone (push_zone (* 1024 10))))
+                                (pset! notes free_note
+                                       (note_c start freq amp dur
+                                               attack decay release sustain
+                                               note_starts free_note
+                                               (,note_kernel)
+                                               note_zone))
+                                (pset! note_starts free_note start)
+                                (pop_zone)
+                                1)
+                              0)))))
        (dotimes (ii poly) ;; sets all notes to inactive
-	 (pset! note_starts ii 9999999999999.0))
+         (pset! note_starts ii 9999999999999.0))
        (lambda (in:double time:double chan:double dat:double*)
-	 (let ((out:double 0.0)
-	       (k 0))
-	   (dotimes (k poly) ;; sum all active notes          
-	     (if (< (pref note_starts k) time)
-		 (set! out (+ out (* 0.3 ((pref notes k) in time chan))))))
-	   (* gain (,effect_kernel out time chan dat)))))))
+         (let ((out:double 0.0)
+               (k 0))
+           (dotimes (k poly) ;; sum all active notes
+             (if (< (pref note_starts k) time)
+                 (set! out (+ out (* 0.3 ((pref notes k) in time chan))))))
+           (* gain (,effect_kernel out time chan dat)))))))
 
 ;; make synth defaults
 (bind-func default_note_c
   (lambda ()
     (let ((sawl (saw_c))
-	  (sawr (saw_c)))
+          (sawr (saw_c)))
       (lambda (time:double chan:double freq:double amp:double)
-	(if (< chan 1.0)
-	    (* amp (/ 200.0 freq) (sawl amp freq))
-	    (* amp (/ 200.0 freq) (sawr amp freq)))))))
+        (if (< chan 1.0)
+            (* amp (/ 200.0 freq) (sawl amp freq))
+            (* amp (/ 200.0 freq) (sawr amp freq)))))))
 
 (bind-func default_effect
   (lambda (in:double time:double chan:double dat:double*)
@@ -141,115 +141,115 @@
 
 (bind-func synth_note_c
   (let ((res 1.0)
-	(res_ 0.0)
-	(fxamp 0.0))
+        (res_ 0.0)
+        (fxamp 0.0))
     (lambda ()
       (let ((oscl (osc_c 0.0))
-	    (oscl3 (osc_c 0.0))
-	    (oscl2 (osc_c 0.0))
-	    (oscr (osc_c 0.25))
-	    (saw1 (saw_c))
-	    (saw2 (saw_c))
-	    (lpf1 (lpf_c))
-	    (lpf2 (lpf_c))
-	    (oscr3 (osc_c 0.25))
-	    (oscr2 (osc_c 0.25)))
-	(lpf2.res res)
-	(lpf1.res res)	
-	(lambda (time:double chan:double freq:double amp:double)
-	  (if (<> res res_)
-	      (begin (lpf2.res res)
-		     (lpf1.res res)
-		     (set! res_ res)))
-	  (if (< chan 1.0)
-	      (* amp (/ 5.0 (log freq)) ;; frequency scale amplitude
-		 (+ (oscl2 1.0 (+ freq (* 10.0 (random))))
-		    (lpf1 (saw1 fxamp freq) (* 5.0 freq))
-		    (oscl 0.8 (+ freq (oscl3 (* 2.01 freq)
-					     (* freq 1.01))))))
-	      (* amp (/ 5.0 (log freq)) ;; frequency scale amplitude	       
-		 (+ (oscr2 1.0 (+ freq (* 5.0 (random))))
-		    (lpf2 (saw2 fxamp freq) (* 3.0 freq))
-		    (oscr 0.8 (+ freq (oscr3 (* 0.99 freq)
+            (oscl3 (osc_c 0.0))
+            (oscl2 (osc_c 0.0))
+            (oscr (osc_c 0.25))
+            (saw1 (saw_c))
+            (saw2 (saw_c))
+            (lpf1 (lpf_c))
+            (lpf2 (lpf_c))
+            (oscr3 (osc_c 0.25))
+            (oscr2 (osc_c 0.25)))
+        (lpf2.res res)
+        (lpf1.res res)
+        (lambda (time:double chan:double freq:double amp:double)
+          (if (<> res res_)
+              (begin (lpf2.res res)
+                     (lpf1.res res)
+                     (set! res_ res)))
+          (if (< chan 1.0)
+              (* amp (/ 5.0 (log freq)) ;; frequency scale amplitude
+                 (+ (oscl2 1.0 (+ freq (* 10.0 (random))))
+                    (lpf1 (saw1 fxamp freq) (* 5.0 freq))
+                    (oscl 0.8 (+ freq (oscl3 (* 2.01 freq)
+                                             (* freq 1.01))))))
+              (* amp (/ 5.0 (log freq)) ;; frequency scale amplitude
+                 (+ (oscr2 1.0 (+ freq (* 5.0 (random))))
+                    (lpf2 (saw2 fxamp freq) (* 3.0 freq))
+                    (oscr 0.8 (+ freq (oscr3 (* 0.99 freq)
                                              (* freq 0.99))))))))))))
 
 
 (bind-func synth_fx 262144
-           (let ((dleft (dtoi64 (* 0.125 SAMPLERATE)))
-                 (dlyl (delay_c dleft))
-                 (dright (dtoi64 (* 0.33333333 SAMPLERATE)))
-                 (dlyr (delay_c dright))
-                 (pan .5)
-                 (pan_old pan)
-                 (wet_ .0)
-                 (wet .3))
-             (lambda (in:double time:double chan:double dat:double*)
-               (if (< pan_old pan) ;; interpolate pan
-                   (set! pan_old (+ pan_old .001))
-                   (set! pan_old (- pan_old .001)))
-               (if (<> wet wet_)
-                   (begin (dlyl.out wet)
-                          (dlyr.out wet)
-                          (set! wet_ wet)))
-               (cond ((< chan 1.0) 
-                      (dlyl (* 2.0 pan_old in)))
-                     ((< chan 2.0)
-                      (dlyr (* 2.0 (- 1.0 pan_old) in)))
-                     (else 0.0)))))
+  (let ((dleft (dtoi64 (* 0.125 SAMPLERATE)))
+        (dlyl (delay_c dleft))
+        (dright (dtoi64 (* 0.33333333 SAMPLERATE)))
+        (dlyr (delay_c dright))
+        (pan .5)
+        (pan_old pan)
+        (wet_ .0)
+        (wet .3))
+    (lambda (in:double time:double chan:double dat:double*)
+      (if (< pan_old pan) ;; interpolate pan
+          (set! pan_old (+ pan_old .001))
+          (set! pan_old (- pan_old .001)))
+      (if (<> wet wet_)
+          (begin (dlyl.out wet)
+                 (dlyr.out wet)
+                 (set! wet_ wet)))
+      (cond ((< chan 1.0)
+             (dlyl (* 2.0 pan_old in)))
+            ((< chan 2.0)
+             (dlyr (* 2.0 (- 1.0 pan_old) in)))
+            (else 0.0)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; extempore_pad 
+;; extempore_pad
 ;;
 (bind-func epad_note_c
   (let ((res 0.1))
     (lambda ()
-      (let ((oscl (square_c 0.0)) 
-	    (oscr (square_c 0.1))
-	    (o1 (osc_c 0.0))
-	    (oscl2 (square_c (random)))
-	    (vcfl (vcf_c))
-	    (vcfr (vcf_c))	  
-	    (oscr2 (square_c (random)))
-	    (ramp 0.0)
-	    (a (+ 1.0 (* 0.02 (random))))
-	    (b (+ 1.0 (* 0.02 (random)))))
-	(vcfl.res (+ res 0.2))
-	(vcfr.res res)      
-	(lambda (time:double chan:double freq:double amp:double)
-	  (if (< chan 1.0)
-	      (* amp (vcfl (+ (oscl 0.3 freq)
-			      (oscl2 0.3 (+ freq a)))
-			   (+ 550.0 (* amp 8000.0))))
-	      (* amp (vcfr (+ (oscr 0.2 freq)
-			      (oscr2 0.2 (* freq b)))
-			   (+ 500.0 (* amp 10000.0))))))))))
+      (let ((oscl (square_c 0.0))
+            (oscr (square_c 0.1))
+            (o1 (osc_c 0.0))
+            (oscl2 (square_c (random)))
+            (vcfl (vcf_c))
+            (vcfr (vcf_c))
+            (oscr2 (square_c (random)))
+            (ramp 0.0)
+            (a (+ 1.0 (* 0.02 (random))))
+            (b (+ 1.0 (* 0.02 (random)))))
+        (vcfl.res (+ res 0.2))
+        (vcfr.res res)
+        (lambda (time:double chan:double freq:double amp:double)
+          (if (< chan 1.0)
+              (* amp (vcfl (+ (oscl 0.3 freq)
+                              (oscl2 0.3 (+ freq a)))
+                           (+ 550.0 (* amp 8000.0))))
+              (* amp (vcfr (+ (oscr 0.2 freq)
+                              (oscr2 0.2 (* freq b)))
+                           (+ 500.0 (* amp 10000.0))))))))))
 
 
 (bind-func epad_fx 2000000
   (let ((pan .5)
-	(d1 (comb_c 44100))
-	(d22 (comb_c 44100))
-	(c1 (chorus_c 0.0))
-	(c2 (chorus_c 0.1))
-	(rev1 (reverb_c 200.0))
-	(rev2 (reverb_c 120.0))	
-	(vcf1 (vcf_c))
-	(del1 1000.0)
-	(del2 2000.0)
-	(ipan pan)
-	(opan (osc_c 0.0))
-	(wet_ .0)
-	(wet .15))
+        (d1 (comb_c 44100))
+        (d22 (comb_c 44100))
+        (c1 (chorus_c 0.0))
+        (c2 (chorus_c 0.1))
+        (rev1 (reverb_c 200.0))
+        (rev2 (reverb_c 120.0))
+        (vcf1 (vcf_c))
+        (del1 1000.0)
+        (del2 2000.0)
+        (ipan pan)
+        (opan (osc_c 0.0))
+        (wet_ .0)
+        (wet .15))
     (lambda (in:double time:double chan:double dat:double*)
       (set! pan (+ 0.5 (opan 0.2 3.0)))
       (rev1.wet wet)
       (rev2.wet wet)
       (cond ((< chan 1.0)
-	     (rev1 (c1 (* 2.0 pan in))))
-	    ((< chan 2.0)
-	     (rev2 (c2 (* 2.0 (- 1.0 pan) in))))
-	    (else 0.0)))))
+             (rev1 (c1 (* 2.0 pan in))))
+            ((< chan 2.0)
+             (rev2 (c2 (* 2.0 (- 1.0 pan) in))))
+            (else 0.0)))))
 
 (define-instrument epad epad_note_c epad_fx)
 (epad.attack 1000.0)
@@ -327,9 +327,9 @@
                      (* 8.0 freq)))
               ((= chan 1.0)
                (lpfr (ringr (+ (sawr1 amp (* freq smudge1))
-                          (sawr2 amp (* freq smudge2)))
-                       (* 4.0 freq)
-                       0.3)
+                               (sawr2 amp (* freq smudge2)))
+                            (* 4.0 freq)
+                            0.3)
                      (* 8.0 freq)))
               (else 0.0))))))
 

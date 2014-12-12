@@ -20,17 +20,17 @@
 ;; an assert macro -- the workhorse of the unit testing framework
 
 (define *func-successes* '((correct)
-			   (incorrect)
-			   (compile)
-			   (no-compile)))
+                           (incorrect)
+                           (compile)
+                           (no-compile)))
 
 (define-macro (change-test-result category func-sym)
   `(for-each
     (lambda (cat)
       (if (equal? (car cat) ,category)
-	  (set-cdr! cat (if (not (member ,func-sym cat))
-			    (cons ,func-sym (cdr cat))))
-	  (set-cdr! cat (cl:remove ,func-sym (cdr cat)))))
+          (set-cdr! cat (if (not (member ,func-sym cat))
+                            (cons ,func-sym (cdr cat))))
+          (set-cdr! cat (cl:remove ,func-sym (cdr cat)))))
     *func-successes*))
 
 (define-macro (test-xtfunc form . retval)
@@ -38,8 +38,8 @@
      (begin
        (change-test-result 'no-compile func-sym)
        (if (defined? func-sym)
-	   (begin (change-test-result 'compile func-sym)
-		  ,(if (null? retval)
+           (begin (change-test-result 'compile func-sym)
+                  ,(if (null? retval)
                        `(begin ,form
                                (change-test-result 'correct func-sym))
                        `(if (= ,form ,(car retval))
@@ -49,16 +49,16 @@
 (define print-test-results
   (lambda ()
     (begin (println 'Test 'results:)
-	   (println '=====================)
-	   (println)
-	   (for-each (lambda (result)
-		       (println '*** (car result) '***)
-		       (println)
-		       (for-each (lambda (fn)
-				   (println '--> fn))
-				 (cdr result))
-		       (println))
-		     *func-successes*))))
+           (println '=====================)
+           (println)
+           (for-each (lambda (result)
+                       (println '*** (car result) '***)
+                       (println)
+                       (for-each (lambda (fn)
+                                   (println '--> fn))
+                                 (cdr result))
+                       (println))
+                     *func-successes*))))
 
 ;; (bind-func non-compiling-func
 ;;   (lambda (a)
@@ -125,30 +125,30 @@
 
 ;; integer literals default to 64 bit integers
 (bind-func int-literal-test
-   (lambda (a)
-     (* a 5)))
+  (lambda (a)
+    (* a 5)))
 
 (test-xtfunc (int-literal-test 6) 30)
 
 ;; float literals default to doubles
 (bind-func float-literal-test
-   (lambda (a)
-     (* a 5.0)))
+  (lambda (a)
+    (* a 5.0)))
 
 (test-xtfunc (float-literal-test 6.0) 30.0)
 
 ;; you are free to recompile an existing closure
 (bind-func int-literal-test
-   (lambda (a)
-      (/ a 5)))
+  (lambda (a)
+    (/ a 5)))
 
 (test-xtfunc (int-literal-test 30))
 
 (bind-func closure-test1
-   (let ((power 0))
-      (lambda (x)
-	 (set! power (+ power 1)) ;; set! for closure mutation as per scheme
-	 (* x power))))
+  (let ((power 0))
+    (lambda (x)
+      (set! power (+ power 1)) ;; set! for closure mutation as per scheme
+      (* x power))))
 
 (test-xtfunc (closure-test1 2))
 
@@ -160,17 +160,17 @@
 (test-xtfunc (closure-returns-closure-test))
 
 (bind-func incrementer-test1
-   (lambda (i:i64)
-      (lambda (inc)
-	 (set! i (+ i inc))
-	 i)))
+  (lambda (i:i64)
+    (lambda (inc)
+      (set! i (+ i inc))
+      i)))
 
 (test-xtfunc (incrementer-test1 0))
 
 ;; so we need to type f properly
 (bind-func incrementer-test2
-   (lambda (f:[i64,i64]* x)
-     (f x)))
+  (lambda (f:[i64,i64]* x)
+    (f x)))
 
 ;; todo can testing use the output of previous tests?
 
@@ -192,9 +192,9 @@
 
 ;; this avoids the wrapper completely
 (bind-func incrementer-test3
-   (let ((f (incrementer-test1 0)))
-      (lambda ()
-	 (f 1))))
+  (let ((f (incrementer-test1 0)))
+    (lambda ()
+      (f 1))))
 
 (test-xtfunc (incrementer-test3) 1)
 (test-xtfunc (incrementer-test3) 2)
@@ -214,9 +214,9 @@
 (bind-func recursive-closure-test
   (lambda (a)
     (if (< a 1)
-	(printf "done\n")
-	(begin (printf "a: %lld\n" a)
-	       (recursive-closure-test (- a 1))))))
+        (printf "done\n")
+        (begin (printf "a: %lld\n" a)
+               (recursive-closure-test (- a 1))))))
 
 (test-xtfunc (recursive-closure-test 3))
 
@@ -246,8 +246,8 @@
 (bind-func tuple-test2
   (lambda ()
     (let ((a:<i64,double>* (alloc)) ; returns pointer to type <i64,double>
-	  (b 37)
-	  (c 6.4))
+          (b 37)
+          (c 6.4))
       (tuple-set! a 0 b) ;; set i64 to 64
       (tset! a 1 c) ;; set double to 6.4 - tset! is an alias for tuple-set!
       (printf "tuple:1 %lld::%f\n" (tuple-ref a 0) (tref a 1))
@@ -268,23 +268,23 @@
 ;; some array code with *casting*
 ;; this function returns void
 (bind-func array-test1
-   (lambda ()
-      (let ((v1:|5,float|* (alloc))
-	    (v2:|5,float|* (alloc))
-	    (i 0)
-	    (k 0))
-	 (dotimes (i 5)
-	    ;; random returns double so "truncate" to float
-	    ;; which is what v expects
-	    (array-set! v1 i (dtof (random))))
-	 ;; we can use the afill! function to fill an array
-	 (afill! v2 1.1 2.2 3.3 4.4 5.5)
-	 (dotimes (k 5)
-	    ;; unfortunately printf doesn't like floats
-	    ;; so back to double for us :(
-	    (printf "val: %lld::%f::%f\n" k
-		    (ftod (array-ref v1 k))
-		    (ftod (aref v2 k)))))))
+  (lambda ()
+    (let ((v1:|5,float|* (alloc))
+          (v2:|5,float|* (alloc))
+          (i 0)
+          (k 0))
+      (dotimes (i 5)
+        ;; random returns double so "truncate" to float
+        ;; which is what v expects
+        (array-set! v1 i (dtof (random))))
+      ;; we can use the afill! function to fill an array
+      (afill! v2 1.1 2.2 3.3 4.4 5.5)
+      (dotimes (k 5)
+        ;; unfortunately printf doesn't like floats
+        ;; so back to double for us :(
+        (printf "val: %lld::%f::%f\n" k
+                (ftod (array-ref v1 k))
+                (ftod (aref v2 k)))))))
 
 (test-xtfunc (array-test1))
 
@@ -316,10 +316,10 @@
 ;; to work with either i64* or |5,i64|*
 
 (bind-func array-test2
-   (lambda (v:|5,i64|*)
-      (let ((f (lambda (x)
-		  (* (array-ref v 2) x))))
-	f)))
+  (lambda (v:|5,i64|*)
+    (let ((f (lambda (x)
+               (* (array-ref v 2) x))))
+      f)))
 
 (bind-func array-test3
   (lambda (v:|5,[i64,i64]*|*)
@@ -327,12 +327,12 @@
       (ff 5))))
 
 (bind-func array-test4
-   (lambda ()
-      (let ((v:|5,[i64,i64]*|* (alloc)) ;; make an array of closures!
-	    (vv:|5,i64|* (alloc)))
-	 (array-set! vv 2 3)
-	 (aset! v 0 (array-test2 vv)) ;; aset! alias for array-set!
-	 (array-test3 v))))
+  (lambda ()
+    (let ((v:|5,[i64,i64]*|* (alloc)) ;; make an array of closures!
+          (vv:|5,i64|* (alloc)))
+      (array-set! vv 2 3)
+      (aset! v 0 (array-test2 vv)) ;; aset! alias for array-set!
+      (array-test3 v))))
 
 ;; try to guess the answer before you call this!!
 (test-xtfunc (array-test4))
@@ -341,22 +341,22 @@
 ;; some conditionals
 
 (bind-func cond-test1
-   (lambda (x:i64 y)
-      (if (> x y)
-	  x
-	  y)))
+  (lambda (x:i64 y)
+    (if (> x y)
+        x
+        y)))
 
 (test-xtfunc (cond-test1 12 13))
 
 ;; returns boolean true
 (bind-func cond-test2
-   (lambda (x:i64)
-      (cond ((= x 1) (printf "A\n"))
-	    ((= x 2) (printf "B\n"))
-	    ((= x 3) (printf "C\n"))
-	    ((= x 4) (printf "D\n"))
-	    (else (printf "E\n")))
-      #t))
+  (lambda (x:i64)
+    (cond ((= x 1) (printf "A\n"))
+          ((= x 2) (printf "B\n"))
+          ((= x 3) (printf "C\n"))
+          ((= x 4) (printf "D\n"))
+          (else (printf "E\n")))
+    #t))
 
 (test-xtfunc (cond-test2 1))
 
@@ -367,47 +367,47 @@
 (bind-func envelope-segments
   (lambda (points:double* num-of-points:i64)
     (let ((lines:[double,double]** (zone-alloc num-of-points))
-	  (k 0))
+          (k 0))
       (dotimes (k num-of-points)
-	(let* ((idx (* k 2))
-	       (x1 (pointer-ref points (+ idx 0)))
-	       (y1 (pointer-ref points (+ idx 1)))
-	       (x2 (pointer-ref points (+ idx 2)))
-	       (y2 (pointer-ref points (+ idx 3)))
-	       (m (if (= 0.0 (- x2 x1)) 0.0 (/ (- y2 y1) (- x2 x1))))
-	       (c (- y2 (* m x2)))
-	       (l (lambda (time) (+ (* m time) c))))
-	  (pointer-set! lines k l)))
+        (let* ((idx (* k 2))
+               (x1 (pointer-ref points (+ idx 0)))
+               (y1 (pointer-ref points (+ idx 1)))
+               (x2 (pointer-ref points (+ idx 2)))
+               (y2 (pointer-ref points (+ idx 3)))
+               (m (if (= 0.0 (- x2 x1)) 0.0 (/ (- y2 y1) (- x2 x1))))
+               (c (- y2 (* m x2)))
+               (l (lambda (time) (+ (* m time) c))))
+          (pointer-set! lines k l)))
       lines)))
 
 (bind-func make-envelope
-   (lambda (points:double* num-of-points)
-      (let ((klines:[double,double]** (envelope-segments points num-of-points))
-	    (line-length num-of-points))
-	 (lambda (time)
-	    (let ((res -1.0)
-		  (k:i64 0))
-	       (dotimes (k num-of-points)
-		  (let ((line (pointer-ref klines k))
-			(time-point (pointer-ref points (* k 2))))
-		     (if (or (= time time-point)
-			     (< time-point time))
-			 (set! res (line time)))))
-	       res)))))
+  (lambda (points:double* num-of-points)
+    (let ((klines:[double,double]** (envelope-segments points num-of-points))
+          (line-length num-of-points))
+      (lambda (time)
+        (let ((res -1.0)
+              (k:i64 0))
+          (dotimes (k num-of-points)
+            (let ((line (pointer-ref klines k))
+                  (time-point (pointer-ref points (* k 2))))
+              (if (or (= time time-point)
+                      (< time-point time))
+                  (set! res (line time)))))
+          res)))))
 
 ;; make a convenience wrapper
 (bind-func env-wrap
-   (let* ((points 3)
-	  (data (zone-alloc (* points 2))))
-      (pointer-set! data 0 0.0) ;; point data
-      (pset! data 1 0.0)
-      (pset! data 2 2.0)
-      (pset! data 3 1.0)
-      (pset! data 4 4.0)
-      (pset! data 5 0.0)
-      (let ((f (make-envelope data points)))
-	 (lambda (time:double)
-	   (f time)))))
+  (let* ((points 3)
+         (data (zone-alloc (* points 2))))
+    (pointer-set! data 0 0.0) ;; point data
+    (pset! data 1 0.0)
+    (pset! data 2 2.0)
+    (pset! data 3 1.0)
+    (pset! data 4 4.0)
+    (pset! data 5 0.0)
+    (let ((f (make-envelope data points)))
+      (lambda (time:double)
+        (f time)))))
 
 (test-xtfunc (env-wrap 0.0) 0.0) ;; time 0.0 should give us 0.0
 (test-xtfunc (env-wrap 1.0) 0.5) ;; time 1.0 should give us 0.5
@@ -466,7 +466,7 @@
 (bind-func dot-access-test3
   (lambda (a:i32)
     (let ((f (lambda ()
-	       (* 3 a))))
+               (* 3 a))))
       f)))
 
 (bind-func dot-access-test4
@@ -482,22 +482,22 @@
   (lambda ()
     (let ((f (lambda (x:i64) x)))
       (lambda (z)
-	(f z)))))
+        (f z)))))
 
 (test-xtfunc (dot-access-test5))
 
 (bind-func dot-access-test6
   (lambda ()
     (let ((t1 (dot-access-test5))
-	  (t2 (dot-access-test5)))
+          (t2 (dot-access-test5)))
       ;; identity of 5
       (printf "%lld:%lld\n" (t1 5) (t2 5))
       (t1.f:[i64,i64]* (lambda (x:i64) (* x x)))
       ;; square of 5
       (printf "%lld:%lld\n" (t1 5) (t2 5)))
-      ;; cube of 5
-      (t2.f:[i64,i64]* (lambda (y:i64) (* y y y)))
-      (printf "%lld:%lld\n" (t1 5) (t2 5))))
+    ;; cube of 5
+    (t2.f:[i64,i64]* (lambda (y:i64) (* y y y)))
+    (printf "%lld:%lld\n" (t1 5) (t2 5))))
 
 (test-xtfunc (dot-access-test6)) ;; 5:5 > 25:5 > 25:125
 
@@ -539,14 +539,14 @@
 (bind-func aref-ptr-test
   (lambda ()
     (let ((arr:|32,i64|* (alloc))
-	  (arroff (aref-ptr arr 16))
-	  (i 0)
-	  (k 0))
+          (arroff (aref-ptr arr 16))
+          (i 0)
+          (k 0))
       ;; load arr
       (dotimes (i 32) (aset! arr i i))
       (dotimes (k 16)
-	(printf "index: %lld\tarr: %lld\tarroff: %lld\n"
-		k (aref arr k) (pref arroff k))))))
+        (printf "index: %lld\tarr: %lld\tarroff: %lld\n"
+                k (aref arr k) (pref arroff k))))))
 
 (test-xtfunc (aref-ptr-test))
 
@@ -566,15 +566,15 @@
 (bind-func array-test5
   (lambda ()
     (let ((tup:tuple-with-array* (stack-alloc))
-	  (t2:|32,i64|* (stack-alloc)))
+          (t2:|32,i64|* (stack-alloc)))
       (aset! t2 0 9)
       (tset! tup 2 5.5)
       (aset! (aref-ptr (tref-ptr tup 1) 0) 0 0)
       (aset! (aref-ptr (tref-ptr tup 1) 0) 1 1)
       (aset! (aref-ptr (tref-ptr tup 1) 0) 2 2)
       (printf "val: %lld %lld %f\n"
-	      (aref (aref-ptr (tref-ptr tup 1) 0) 1)
-	      (aref t2 0) (ftod (tref tup 2)))
+              (aref (aref-ptr (tref-ptr tup 1) 0) 1)
+              (aref t2 0) (ftod (tref tup 2)))
       (aref (aref-ptr (tref-ptr tup 1) 0) 1))))
 
 (test-xtfunc (array-test5) 1) ;; val: 1 9 5.5
@@ -701,9 +701,9 @@
   (lambda ()
     (let ((i 0))
       (dotimes (i 100000000)
-	(pset! g_array3 i i))
+        (pset! g_array3 i i))
       (= (pref g_array3 87654321)
-	 87654321))))
+         87654321))))
 
 (test-xtfunc (test_g_array3) 1)
 
@@ -765,35 +765,35 @@
   (lambda ()
     (let ((b:|5,double|* (zalloc)))
       (aset! b 0
-	(memzone 1024
-	   (let ((a:|10,double|* (zalloc)))
-	     (aset! a 0 3.5)
-	     (aref a 0))))
+             (memzone 1024
+                      (let ((a:|10,double|* (zalloc)))
+                        (aset! a 0 3.5)
+                        (aref a 0))))
       (let ((c:|9,i32|* (zalloc)))
-	(aset! c 0 99)
-	(aref b 0)))))
+        (aset! c 0 99)
+        (aref b 0)))))
 
 (test-xtfunc (memzone-test1) 3.5)
 
 (bind-func memzone-test2
   (lambda ()
     (memzone 1024
-      (let ((k:|15,double|* (zalloc))
-	    (f (lambda (fa:|15,double|*)
-		 (memzone 1024
-		   (let ((a:|10,double|* (zalloc))
-			 (i 0))
-		     (dotimes (i 10)
-		       (aset! a i (* (aref fa i) (random))))
-		   a)))))
-	(f k)))))
+             (let ((k:|15,double|* (zalloc))
+                   (f (lambda (fa:|15,double|*)
+                        (memzone 1024
+                                 (let ((a:|10,double|* (zalloc))
+                                       (i 0))
+                                   (dotimes (i 10)
+                                     (aset! a i (* (aref fa i) (random))))
+                                   a)))))
+               (f k)))))
 
 (test-xtfunc (memzone-test2))
 
 (bind-func memzone-test3
   (lambda ()
     (let ((v (memzone-test2))
-	  (i 0))
+          (i 0))
       (dotimes (i 10) (printf "%lld:%f\n" i (aref v i))))))
 
 (test-xtfunc (memzone-test3)) ;; should print all 0.0's
@@ -801,9 +801,9 @@
 (bind-func memzone-test4
   (lambda ()
     (memzone 1024 (* 44100 10)
-      (let ((a:|5,double|* (alloc)))
-	(aset! a 0 5.5)
-	(aref a 0)))))
+             (let ((a:|5,double|* (alloc)))
+               (aset! a 0 5.5)
+               (aref a 0)))))
 
 (test-xtfunc (memzone-test4) 5.50000)
 
@@ -952,23 +952,23 @@
 (bind-func vector-test1
   (lambda ()
     (let ((v1:/4,float/* (alloc))
-	  (v2:/4,float/* (alloc))
-	  (v3:/4,float/* (alloc)))
+          (v2:/4,float/* (alloc))
+          (v3:/4,float/* (alloc)))
       (vfill! v1 4.0 3.0 2.0 1.0)
       (vfill! v2 1.0 2.0 3.0 4.0)
       (vfill! v3 5.0 5.0 5.0 5.0)
       (let ((v4 (* v1 v2))
-	    (v5 (> v3 v4))) ;; unforunately vector conditionals don't work!
-	(printf "mul:%f:%f:%f:%f\n" (ftod (vref v4 0)) (ftod (vref v4 1)) (ftod (vref v4 2)) (ftod (vref v4 3)))
-	(printf "cmp:%d:%d:%d:%d\n" (i1toi32 (vref v5 0)) (i1toi32 (vref v5 1)) (i1toi32 (vref v5 2)) (i1toi32 (vref v5 3)))
-	void))))
+            (v5 (> v3 v4))) ;; unforunately vector conditionals don't work!
+        (printf "mul:%f:%f:%f:%f\n" (ftod (vref v4 0)) (ftod (vref v4 1)) (ftod (vref v4 2)) (ftod (vref v4 3)))
+        (printf "cmp:%d:%d:%d:%d\n" (i1toi32 (vref v5 0)) (i1toi32 (vref v5 1)) (i1toi32 (vref v5 2)) (i1toi32 (vref v5 3)))
+        void))))
 
 (test-xtfunc (vector-test1))
 
 (bind-func vector-test2
   (lambda ()
     (let ((v1:/4,float/* (alloc))
-	  (v2:/4,float/* (alloc)))
+          (v2:/4,float/* (alloc)))
       (vfill! v1 1.0 2.0 4.0 8.0)
       (vfill! v2 2.0 2.5 2.25 2.125)
       (* v1 v2))))
@@ -977,10 +977,10 @@
   (lambda ()
     (let ((a (vector-test2)))
       (printf "%f:%f:%f:%f\n"
-	      (ftod (vref a 0))
-	      (ftod (vref a 1))
-	      (ftod (vref a 2))
-	      (ftod (vref a 3)))
+              (ftod (vref a 0))
+              (ftod (vref a 1))
+              (ftod (vref a 2))
+              (ftod (vref a 3)))
       void)))
 
 (test-xtfunc (vector-test3))
@@ -988,35 +988,35 @@
 ;; vectorised sine func
 (bind-func vsinf4
   (let ((p:/4,float/* (alloc))
-	(b:/4,float/* (alloc))
-	(c:/4,float/* (alloc))
-	(f1:/4,float/* (alloc))
-	(f2:/4,float/* (alloc))
-	(i:i32 0)
-	(p_ 0.225)
-	(b_ (dtof (/ 4.0 PI)))
-	(c_ (dtof (/ -4.0 (* PI PI)))))
+        (b:/4,float/* (alloc))
+        (c:/4,float/* (alloc))
+        (f1:/4,float/* (alloc))
+        (f2:/4,float/* (alloc))
+        (i:i32 0)
+        (p_ 0.225)
+        (b_ (dtof (/ 4.0 PI)))
+        (c_ (dtof (/ -4.0 (* PI PI)))))
     (dotimes (i 4) (vset! p i p_) (vset! b i b_) (vset! c i c_))
     (lambda (x:/4,float/)
       ;; no SIMD for abs yet!
       (dotimes (i 4) (vset! f1 i (fabsf (vref x i))))
       (let ((y (+ (* b x) (* c x f1))))
-	;; no SIMD for abs yet!
-	(dotimes (i 4) (vset! f2 i (fabsf (vref y i))))
-	(+ (* p (- (* y f2) y)) y)))))
+        ;; no SIMD for abs yet!
+        (dotimes (i 4) (vset! f2 i (fabsf (vref y i))))
+        (+ (* p (- (* y f2) y)) y)))))
 
 (bind-func vcosf4
   (let ((p:/4,float/* (alloc))
-	(b:/4,float/* (alloc))
-	(c:/4,float/* (alloc))
-	(d:/4,float/* (alloc))
-	(f1:/4,float/* (alloc))
-	(f2:/4,float/* (alloc))
-	(i:i32 0)
-	(p_ 0.225)
-	(d_ (dtof (/ PI 2.0)))
-	(b_ (dtof (/ 4.0 PI)))
-	(c_ (dtof (/ -4.0 (* PI PI)))))
+        (b:/4,float/* (alloc))
+        (c:/4,float/* (alloc))
+        (d:/4,float/* (alloc))
+        (f1:/4,float/* (alloc))
+        (f2:/4,float/* (alloc))
+        (i:i32 0)
+        (p_ 0.225)
+        (d_ (dtof (/ PI 2.0)))
+        (b_ (dtof (/ 4.0 PI)))
+        (c_ (dtof (/ -4.0 (* PI PI)))))
     (dotimes (i 4)
       (vset! p i p_) (vset! b i b_) (vset! c i c_) (vset! d i d_))
     (lambda (x:/4,float/)
@@ -1025,9 +1025,9 @@
       ;; no SIMD for abs yet!
       (dotimes (i 4) (vset! f1 i (fabsf (vref x i))))
       (let ((y (+ (* b x) (* c x f1))))
-	;; no SIMD for abs yet!
-	(dotimes (i 4) (vset! f2 i (fabsf (vref y i))))
-	(+ (* p (- (* y f2) y)) y)))))
+        ;; no SIMD for abs yet!
+        (dotimes (i 4) (vset! f2 i (fabsf (vref y i))))
+        (+ (* p (- (* y f2) y)) y)))))
 
 
 (bind-func vector-test4
@@ -1035,29 +1035,29 @@
     (let ((a:/4,float/* (alloc)))
       (vfill! a 0.1 0.2 0.3 0.4)
       (let ((b (vsinf4 (pref a 0)))
-	    (c (vcosf4 (pref a 0))))
-	(printf "precision inaccuracy is expected:\n")
-	(printf " sinf:\t%f,%f,%f,%f\n"
-		(ftod (sinf 0.1))
-		(ftod (sinf 0.2))
-		(ftod (sinf 0.3))
-		(ftod (sinf 0.4)))
-	(printf "vsinf:\t%f,%f,%f,%f\n"
-		(ftod (vref b 0))
-		(ftod (vref b 1))
-		(ftod (vref b 2))
-		(ftod (vref b 3)))
-	(printf " cosf:\t%f,%f,%f,%f\n"
-		(ftod (cosf 0.1))
-		(ftod (cosf 0.2))
-		(ftod (cosf 0.3))
-		(ftod (cosf 0.4)))
-	(printf "vcosf:\t%f,%f,%f,%f\n"
-		(ftod (vref c 0))
-		(ftod (vref c 1))
-		(ftod (vref c 2))
-		(ftod (vref c 3)))
-	void))))
+            (c (vcosf4 (pref a 0))))
+        (printf "precision inaccuracy is expected:\n")
+        (printf " sinf:\t%f,%f,%f,%f\n"
+                (ftod (sinf 0.1))
+                (ftod (sinf 0.2))
+                (ftod (sinf 0.3))
+                (ftod (sinf 0.4)))
+        (printf "vsinf:\t%f,%f,%f,%f\n"
+                (ftod (vref b 0))
+                (ftod (vref b 1))
+                (ftod (vref b 2))
+                (ftod (vref b 3)))
+        (printf " cosf:\t%f,%f,%f,%f\n"
+                (ftod (cosf 0.1))
+                (ftod (cosf 0.2))
+                (ftod (cosf 0.3))
+                (ftod (cosf 0.4)))
+        (printf "vcosf:\t%f,%f,%f,%f\n"
+                (ftod (vref c 0))
+                (ftod (vref c 1))
+                (ftod (vref c 2))
+                (ftod (vref c 3)))
+        void))))
 
 (test-xtfunc (vector-test4))
 
@@ -1074,8 +1074,8 @@
   (lambda ()
     (let ((l1 (xjoin 1.0 null)))
       (xmap (lambda (i)
-	      (* i 2.0))
-	    l1))))
+              (* i 2.0))
+            l1))))
 
 (test-xtfunc (xlist_test1))
 
@@ -1083,8 +1083,8 @@
   (lambda ()
     (let ((l1 (xlist 1.0 2.0 3.0 4.0)))
       (xmap (lambda (i)
-	      (printf "%f\n" (* i 2.0)))
-	    l1))))
+              (printf "%f\n" (* i 2.0)))
+            l1))))
 
 (test-xtfunc (xlist_test2))
 
@@ -1093,8 +1093,8 @@
   (lambda ()
     (let ((l1 (xlist 1 2 3 4)))
       (xmap (lambda (i)
-	      (* i (xlength l1)))
-	    l1))))
+              (* i (xlength l1)))
+            l1))))
 
 (test-xtfunc (xlist_test3))
 
@@ -1102,21 +1102,21 @@
   (lambda ()
     (let ((l1 (xlist "andrew" "ben" "torben")))
       (xmap (lambda (i)
-	      (if (= (strcmp i "andrew") 0)
-		  (printf "%s rocks\n" i)
-		  (printf "%s rolls\n" i)))
-	    l1))))
+              (if (= (strcmp i "andrew") 0)
+                  (printf "%s rocks\n" i)
+                  (printf "%s rolls\n" i)))
+            l1))))
 
 (test-xtfunc (xlist_test4))
 
 (bind-func xlist_test5
   (lambda ()
     (let ((l1 (xlist (xlist "andrew" "london")
-		     (xlist "ben" "new york")
-		     (xlist "torben" "moscow"))))
+                     (xlist "ben" "new york")
+                     (xlist "torben" "moscow"))))
       (xmap (lambda (i)
-	      (printf "%s rocks\n" (xhead i)))
-	    l1))))
+              (printf "%s rocks\n" (xhead i)))
+            l1))))
 
 (test-xtfunc (xlist_test5))
 
@@ -1125,27 +1125,27 @@
   (lambda ()
     (let ((l1 (xlist (xlist "andrew" "london") (xlist "ben" "new york") (xlist "torben" "moscow"))))
       (xmap (lambda (i)
-	      (if (= (strcmp (xhead i) "andrew") 0)
-		  (printf "%s rocks %s\n" (xhead i) (xhead (xtail i)))
-		  (printf "%s rolls %s\n" (xhead i) (xhead (xtail i)))))
-	    l1))))
+              (if (= (strcmp (xhead i) "andrew") 0)
+                  (printf "%s rocks %s\n" (xhead i) (xhead (xtail i)))
+                  (printf "%s rolls %s\n" (xhead i) (xhead (xtail i)))))
+            l1))))
 
 (test-xtfunc (xlist_test6))
 
 (bind-func xlist_test7
   (lambda ()
     (let ((l1 (xlist (xlist "andrew" "london")
-		     (xlist "ben" "new york")
-		     (xlist "torben" "moscow"))))
+                     (xlist "ben" "new york")
+                     (xlist "torben" "moscow"))))
       (xmap (lambda (i)
-	      (xmap (lambda (k:i8*)
-		      (printf "\t::%s\n" k))
-		    i)
-	      (if (= (strcmp (xhead i) "andrew") 0)
-		  (printf "%s rocks %s\n" (xhead i) (xhead (xtail i)))
-		  (printf "%s rolls %s\n" (xhead i) (xhead (xtail i))))
-	      (i64toi32 1))
-	    l1))))
+              (xmap (lambda (k:i8*)
+                      (printf "\t::%s\n" k))
+                    i)
+              (if (= (strcmp (xhead i) "andrew") 0)
+                  (printf "%s rocks %s\n" (xhead i) (xhead (xtail i)))
+                  (printf "%s rolls %s\n" (xhead i) (xhead (xtail i))))
+              (i64toi32 1))
+            l1))))
 
 (test-xtfunc (xlist_test7))
 
@@ -1153,7 +1153,7 @@
 (bind-func xlist_test8
   (lambda ()
     (let ((l1 (xlist 1 2 3))
-	  (last (xlast l1)))
+          (last (xlast l1)))
       last)))
 
 (test-xtfunc (xlist_test8))
@@ -1161,7 +1161,7 @@
 (bind-func xlist_test8b
   (lambda ()
     (let ((l1 (xlist 1.0 2.0 3.0))
-	  (l2 (xlast l1)))
+          (l2 (xlast l1)))
       1)))
 
 (test-xtfunc (xlist_test8b))
@@ -1169,7 +1169,7 @@
 (bind-func xlist_test9
   (lambda ()
     (let ((l1 (xlist 1 2 3))
-	  (last (xlast l1)))
+          (last (xlast l1)))
       (printf "%d\n" (xhead last)))))
 
 (test-xtfunc (xlist_test9))
@@ -1178,8 +1178,8 @@
   (lambda ()
     (let ((l1 (xlist "andrew" "ben" "torben")))
       (xmap (lambda (i)
-	      (printf "%s\n" i))
-	    l1)
+              (printf "%s\n" i))
+            l1)
       void)))
 
 (test-xtfunc (xlist_test4))
@@ -1205,11 +1205,11 @@
 (bind-func xappend_test1
   (lambda ()
     (let ((l1 (xlist "a" "b" "c"))
-	  (l2 (xlist "d" "e" "f"))
-	  (l3 (xappend l1 l2)))
+          (l2 (xlist "d" "e" "f"))
+          (l3 (xappend l1 l2)))
       (xmap (lambda (k)
-	     (printf "%s\n" k))
-	   l3)
+              (printf "%s\n" k))
+            l3)
       void)))
 
 (test-xtfunc (xappend_test1))
@@ -1236,7 +1236,7 @@
 (bind-func xpair_test3
   (lambda ()
     (let ((l1 (xlist (xpair 1 "andrew") (xpair 2 "ben")))
-	  (l2 (xhead l1)))
+          (l2 (xhead l1)))
       (printf "%s\n" (tref (xhead l1) 1))
       l1)))
 
@@ -1245,7 +1245,7 @@
 (bind-func xpair_test4
   (lambda ()
     (let ((l1 (xlist (xpair 1 "andrew") (xpair 2 "ben")))
-	  (l2 (xhead l1)))
+          (l2 (xhead l1)))
       (printf "%s\n" (xsecond (xhead (xtail l1))))
       l1)))
 
@@ -1389,32 +1389,32 @@
 ;; for date, person, cat and dog
 ;;
 (bind-method date print:[void]*
-  (lambda ()
-    (printf "%d/%d/%d\n"
-            (xobj_get_day self)
-            (xobj_get_month self)
-            (xobj_get_year self))
-    void))
+             (lambda ()
+               (printf "%d/%d/%d\n"
+                       (xobj_get_day self)
+                       (xobj_get_month self)
+                       (xobj_get_year self))
+               void))
 
 (bind-method person print:[void]*
-  (lambda ()
-    (printf "%s is %d years old and talks\n"
-            (xobj_get_firstname self)
-            (xobj_get_age self))
-    void))
+             (lambda ()
+               (printf "%s is %d years old and talks\n"
+                       (xobj_get_firstname self)
+                       (xobj_get_age self))
+               void))
 
 (bind-method dog print:[void]*
-  (lambda ()
-    (printf "%s barks!\n"
-            (xobj_get_name self))
-    void))
+             (lambda ()
+               (printf "%s barks!\n"
+                       (xobj_get_name self))
+               void))
 
 (bind-method cat print:[void]*
-  (lambda ()
-    (printf "%s the cat was born on "
-            (xobj_get_name self))
-    (xobj_print (xobj_get_birthday self))
-    void))
+             (lambda ()
+               (printf "%s the cat was born on "
+                       (xobj_get_name self))
+               (xobj_print (xobj_get_birthday self))
+               void))
 
 
 ;; test building a dog
@@ -1500,7 +1500,7 @@
 (bind-func test_xstring_cmp
   (lambda ()
     (xstring_cmp (xstring "foo")
-		 (xstring "foo"))))
+                 (xstring "foo"))))
 
 (test-xtfunc (test_xstring_cmp) 0)
 
@@ -1509,7 +1509,7 @@
     (let ((result (xstring_cat (xstring "foo")
                                (xstring "bar"))))
       (println_xstring result)
-      (xstring_cmp result 
+      (xstring_cmp result
                    (xstring "foobar")))))
 
 (test-xtfunc (test_xstring_cat) 0)
@@ -1517,7 +1517,7 @@
 (bind-func test_xstring_levenshtein
   (lambda ()
     (xstring_levenshtein (xstring "foo")
-			 (xstring "bor"))))
+                         (xstring "bor"))))
 
 (test-xtfunc (test_xstring_levenshtein) 2)
 

@@ -15,7 +15,7 @@
 ;;
 ;; clang kiss_fft.c -dynamiclib -I/usr/include/malloc -o kiss_fft.1.3.0.dylib -current_version 1.3.0
 ;;
-;; Then, copy the dylib into somewhere on your lib path, e.g. /usr/local/lib 
+;; Then, copy the dylib into somewhere on your lib path, e.g. /usr/local/lib
 
 ;;; Code:
 

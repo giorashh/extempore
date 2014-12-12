@@ -6,70 +6,70 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 ;; first check if we are windows we need to load some extensions!
 (if (string=? (sys:platform) "Windows")
     (begin (println "Loading OpenGL Extensions for Windows!!!!!")
-	   (gl:add-extension "glActiveTexture")
-	   (gl:add-extension "glGetShaderiv")
-	   (gl:add-extension "glGetShaderInfoLog")
-	   (gl:add-extension "glGetProgramiv")
-	   (gl:add-extension "glGetProgramInfoLog")
-	   (gl:add-extension "glCreateShader")
-	   (gl:add-extension "glCreateProgram")
-	   (gl:add-extension "glShaderSource")
-	   (gl:add-extension "glCompileShader")
-	   (gl:add-extension "glAttachShader")
-	   (gl:add-extension "glLinkProgram")
-	   (gl:add-extension "glUseProgram")
-	   (gl:add-extension "glUniform1f")
-	   (gl:add-extension "glUniform1i")	   
-	   (gl:add-extension "glUniform2f")
-	   (gl:add-extension "glUniform1fv")
-	   (gl:add-extension "glUniform2fv")
-	   (gl:add-extension "glUniform3f")	   
-	   (gl:add-extension "glUniform4f")
-	   (gl:add-extension "glGetUniformLocation")
-	   (gl:add-extension "glGenBuffers")
-	   (gl:add-extension "glBindBuffer")
-	   (gl:add-extension "glBufferData")
-	   (gl:add-extension "glGetAttribLocation")
-	   (gl:add-extension "glBufferSubData")
-	   (gl:add-extension "glEnableVertexAttribArray")
-	   (gl:add-extension "glVertexAttribPointer")
-	   (gl:add-extension "glDisableVertexAttribArray")
-	   (llvm:compile "declare i32 @glGetUniformBlockIndex(i32,i8*)")
-	   (gl:add-extension "glGetUniformBlockIndex")
-	   (llvm:compile "declare void @glUniformBlockBinding(i32,i32,i32)")	   
-	   (gl:add-extension "glUniformBlockBinding")
-	   (llvm:compile "declare void @glBindBufferRange(i32,i32,i32,i64,i64)")
-	   (gl:add-extension "glBindBufferRange")
-	   ;; frame buffer bits
-	   (llvm:compile "declare void @glGenFramebuffers(i32,i32*)")
-	   (gl:add-extension "glGenFramebuffers")
-	   (llvm:compile "declare void @glGenRenderbuffers(i32,i32*)")
-	   (gl:add-extension "glGenRenderbuffers")
-	   (llvm:compile "declare void @glBindFramebuffer(i32,i32)")
-	   (gl:add-extension "glBindFramebuffer")
-	   (llvm:compile "declare void @glBindRenderbuffer(i32,i32)")
-	   (gl:add-extension "glBindRenderbuffer")
-	   (llvm:compile "declare void @glRenderbufferStorage(i32,i32,i32,i32)")
-	   (gl:add-extension "glRenderbufferStorage")
-	   (llvm:compile "declare void @glFramebufferRenderbuffer(i32,i32,i32,i32)")
-	   (gl:add-extension "glFramebufferRenderbuffer")
-	   (llvm:compile "declare void @glFramebufferTexture(i32,i32,i32,i32)")
-	   (gl:add-extension "glFramebufferTexture")
-	   (llvm:compile "declare void @glFramebufferTexture1D(i32,i32,i32,i32,i32)")
-	   (gl:add-extension "glFramebufferTexture1D")
-	   (llvm:compile "declare void @glFramebufferTexture2D(i32,i32,i32,i32,i32)")	   
-	   (gl:add-extension "glFramebufferTexture2D")
-	   (llvm:compile "declare void @glFramebufferTexture3D(i32,i32,i32,i32,i32,i32)")	   
-	   (gl:add-extension "glFramebufferTexture3D")
-	   (llvm:compile "declare i32 @glCheckFramebufferStatus(i32)")
-	   (gl:add-extension "glCheckFramebufferStatus")))
+           (gl:add-extension "glActiveTexture")
+           (gl:add-extension "glGetShaderiv")
+           (gl:add-extension "glGetShaderInfoLog")
+           (gl:add-extension "glGetProgramiv")
+           (gl:add-extension "glGetProgramInfoLog")
+           (gl:add-extension "glCreateShader")
+           (gl:add-extension "glCreateProgram")
+           (gl:add-extension "glShaderSource")
+           (gl:add-extension "glCompileShader")
+           (gl:add-extension "glAttachShader")
+           (gl:add-extension "glLinkProgram")
+           (gl:add-extension "glUseProgram")
+           (gl:add-extension "glUniform1f")
+           (gl:add-extension "glUniform1i")
+           (gl:add-extension "glUniform2f")
+           (gl:add-extension "glUniform1fv")
+           (gl:add-extension "glUniform2fv")
+           (gl:add-extension "glUniform3f")
+           (gl:add-extension "glUniform4f")
+           (gl:add-extension "glGetUniformLocation")
+           (gl:add-extension "glGenBuffers")
+           (gl:add-extension "glBindBuffer")
+           (gl:add-extension "glBufferData")
+           (gl:add-extension "glGetAttribLocation")
+           (gl:add-extension "glBufferSubData")
+           (gl:add-extension "glEnableVertexAttribArray")
+           (gl:add-extension "glVertexAttribPointer")
+           (gl:add-extension "glDisableVertexAttribArray")
+           (llvm:compile "declare i32 @glGetUniformBlockIndex(i32,i8*)")
+           (gl:add-extension "glGetUniformBlockIndex")
+           (llvm:compile "declare void @glUniformBlockBinding(i32,i32,i32)")
+           (gl:add-extension "glUniformBlockBinding")
+           (llvm:compile "declare void @glBindBufferRange(i32,i32,i32,i64,i64)")
+           (gl:add-extension "glBindBufferRange")
+           ;; frame buffer bits
+           (llvm:compile "declare void @glGenFramebuffers(i32,i32*)")
+           (gl:add-extension "glGenFramebuffers")
+           (llvm:compile "declare void @glGenRenderbuffers(i32,i32*)")
+           (gl:add-extension "glGenRenderbuffers")
+           (llvm:compile "declare void @glBindFramebuffer(i32,i32)")
+           (gl:add-extension "glBindFramebuffer")
+           (llvm:compile "declare void @glBindRenderbuffer(i32,i32)")
+           (gl:add-extension "glBindRenderbuffer")
+           (llvm:compile "declare void @glRenderbufferStorage(i32,i32,i32,i32)")
+           (gl:add-extension "glRenderbufferStorage")
+           (llvm:compile "declare void @glFramebufferRenderbuffer(i32,i32,i32,i32)")
+           (gl:add-extension "glFramebufferRenderbuffer")
+           (llvm:compile "declare void @glFramebufferTexture(i32,i32,i32,i32)")
+           (gl:add-extension "glFramebufferTexture")
+           (llvm:compile "declare void @glFramebufferTexture1D(i32,i32,i32,i32,i32)")
+           (gl:add-extension "glFramebufferTexture1D")
+           (llvm:compile "declare void @glFramebufferTexture2D(i32,i32,i32,i32,i32)")
+           (gl:add-extension "glFramebufferTexture2D")
+           (llvm:compile "declare void @glFramebufferTexture3D(i32,i32,i32,i32,i32,i32)")
+           (gl:add-extension "glFramebufferTexture3D")
+           (llvm:compile "declare i32 @glCheckFramebufferStatus(i32)")
+           (gl:add-extension "glCheckFramebufferStatus")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -86,20 +86,20 @@
           ((string=? platform "OSX") (sys:open-dylib "/System/Library/Frameworks/OpenGL.framework/OpenGL"))
           (else (print "Unknown platform: " platform)))))
 
-;; if on windows also check for opengl32.dll			  
+;; if on windows also check for opengl32.dll
 (if (or (eq? #f libgl)
-	    (null? libgl)) 
-	(if (string=? "Windows" (sys:platform))
-	    (begin (set! libgl (sys:open-dylib "opengl32.dll"))
-		       (if (or (null? libgl)
-				       (eq? #f libgl))
-			       (print-error "Error loading opengl library")))	   
-		(print-error "Error loading opengl library")))
+        (null? libgl))
+    (if (string=? "Windows" (sys:platform))
+        (begin (set! libgl (sys:open-dylib "opengl32.dll"))
+               (if (or (null? libgl)
+                       (eq? #f libgl))
+                   (print-error "Error loading opengl library")))
+        (print-error "Error loading opengl library")))
 
 (if (not (string=? (sys:platform) "Windows"))
     (begin (llvm:compile "declare i32 @glGetUniformBlockIndex(i32, i8*);")
-	   (llvm:compile "declare void @glUniformBlockBinding(i32, i32, i32);")
-	   (llvm:compile "declare void @glBindBufferRange(i32,i32,i32,i32,i32);")))
+           (llvm:compile "declare void @glUniformBlockBinding(i32, i32, i32);")
+           (llvm:compile "declare void @glBindBufferRange(i32,i32,i32,i32,i32);")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; missing opengl constants
@@ -149,18 +149,18 @@
 
 
 (if (not (string=? "Windows" (sys:platform)))
-	(begin 
-	(bind-lib libgl glGenFramebuffers [void,i32,i32*]*)
-	(bind-lib libgl glGenRenderbuffers [void,i32,i32*]*)
-	(bind-lib libgl glBindFramebuffer [void,i32,i32]*)
-	(bind-lib libgl glBindRenderbuffer [void,i32,i32]*)
-	(bind-lib libgl glRenderbufferStorage [void,i32,i32,i32,i32]*)
-	(bind-lib libgl glFramebufferRenderbuffer [void,i32,i32,i32,i32]*)
-	(bind-lib libgl glFramebufferTexture [void,i32,i32,i32,i32]*)
-	(bind-lib libgl glFramebufferTexture1D [void,i32,i32,i32,i32,i32]*)
-	(bind-lib libgl glFramebufferTexture2D [void,i32,i32,i32,i32,i32]*)
-	(bind-lib libgl glFramebufferTexture3D [void,i32,i32,i32,i32,i32,i32]*)
-	(bind-lib libgl glCheckFramebufferStatus [i32,i32]*)))
+    (begin
+      (bind-lib libgl glGenFramebuffers [void,i32,i32*]*)
+      (bind-lib libgl glGenRenderbuffers [void,i32,i32*]*)
+      (bind-lib libgl glBindFramebuffer [void,i32,i32]*)
+      (bind-lib libgl glBindRenderbuffer [void,i32,i32]*)
+      (bind-lib libgl glRenderbufferStorage [void,i32,i32,i32,i32]*)
+      (bind-lib libgl glFramebufferRenderbuffer [void,i32,i32,i32,i32]*)
+      (bind-lib libgl glFramebufferTexture [void,i32,i32,i32,i32]*)
+      (bind-lib libgl glFramebufferTexture1D [void,i32,i32,i32,i32,i32]*)
+      (bind-lib libgl glFramebufferTexture2D [void,i32,i32,i32,i32,i32]*)
+      (bind-lib libgl glFramebufferTexture3D [void,i32,i32,i32,i32,i32,i32]*)
+      (bind-lib libgl glCheckFramebufferStatus [i32,i32]*)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load GLU
@@ -175,7 +175,7 @@
 (bind-lib libglu gluLookAt [void,double,double,double,double,double,double,double,double,double]*)
 (bind-lib libglu gluPerspective [void,double,double,double,double]*)
 (bind-lib libglu gluErrorString [i8*,i32]*)
-			   
+
 
 
 (bind-func gl_setup
@@ -183,8 +183,8 @@
     (glEnable GL_LIGHTING)
     (glEnable GL_LIGHT0)
     (let ((diffuse (heap-alloc 4 float))
-	  (specular (heap-alloc 4 float))
-	  (position (heap-alloc 4 float)))      
+          (specular (heap-alloc 4 float))
+          (position (heap-alloc 4 float)))
       (pset! diffuse 0 1.0)
       (pset! diffuse 1 1.0)
       (pset! diffuse 2 1.0)
@@ -248,10 +248,10 @@
 ;; 	       (gl:add-extension "glLinkProgram")
 ;; 	       (gl:add-extension "glUseProgram")
 ;; 	       (gl:add-extension "glUniform1f")
-;; 	       (gl:add-extension "glUniform1i")	   
+;; 	       (gl:add-extension "glUniform1i")
 ;; 	       (gl:add-extension "glUniform2f")
 ;; 	       (gl:add-extension "glUniform1fv")
-;; 	       (gl:add-extension "glUniform2fv")	   	   	   
+;; 	       (gl:add-extension "glUniform2fv")
 ;; 	       (gl:add-extension "glGetUniformLocation")
 ;; 	       (gl:add-extension "glGetUniformBlockIndex")
 ;; 	       (gl:add-extension "glUniformBlockBinding")
@@ -273,7 +273,7 @@
 (bind-func fbo_create_texture
   (lambda (width height)
     (let ((id:i32* (salloc))
-	  (tex:i32* (salloc)))
+          (tex:i32* (salloc)))
       (glGenRenderbuffers 1 id)
       (glBindRenderbuffer GL_RENDERBUFFER (pref id 0))
       ;;(glRenderbufferStorage GL_RENDERBUFFER GL_RGBA16F width height)
@@ -296,7 +296,7 @@
 (bind-func fbo_create_depth_buffer
   (lambda (width height)
     (let ((id:i32* (salloc))
-	  (tex:i32* (salloc)))
+          (tex:i32* (salloc)))
       (glGenRenderbuffers 1 id)
       (glBindRenderbuffer GL_RENDERBUFFER (pref id 0))
       ;;(glRenderbufferStorage GL_RENDERBUFFER GL_DEPTH_COMPONENT32 width height)
@@ -319,7 +319,7 @@
 (bind-func fbo_create_texture_sqr
   (lambda (width height)
     (let ((id:i32* (salloc))
-	  (tex:i32* (salloc)))
+          (tex:i32* (salloc)))
       (glGenRenderbuffers 1 id)
       (glBindRenderbuffer GL_RENDERBUFFER (pref id 0))
       (glRenderbufferStorage GL_RENDERBUFFER GL_RGBA8 width height)
@@ -340,7 +340,7 @@
 (bind-func fbo_create_depth_buffer_sqr
   (lambda (width height)
     (let ((id:i32* (salloc))
-	  (tex:i32* (salloc)))
+          (tex:i32* (salloc)))
       (glGenRenderbuffers 1 id)
       (glBindRenderbuffer GL_RENDERBUFFER (pref id 0))
       ;;(glRenderbufferStorage GL_RENDERBUFFER GL_DEPTH_COMPONENT32 width height)
@@ -371,7 +371,7 @@
 (bind-func create-vbo
   (lambda (size:i32 data:i8* type:i32)
     (let ((vbo:E_vbo* (halloc))
-	  (vboid:i32* (salloc)))	  
+          (vboid:i32* (salloc)))
       (glGenBuffers 1 vboid)
       (glBindBuffer GL_ARRAY_BUFFER (pref vboid 0))
       (glBufferData GL_ARRAY_BUFFER size null type)
@@ -379,7 +379,7 @@
       (tfill! vbo (pref vboid 0) size data)
       (glBindBuffer GL_ARRAY_BUFFER 0)
       vbo)))
-      
+
 
 ;; structure to hold fbo data
 ;; fbo id          0
@@ -394,9 +394,9 @@
 (bind-func create-fbo
   (lambda (width:i32 height:i32 _texid:i32 _depthid:i32)
     (let ((texid (fbo_create_texture width height))
-	  (depthid (fbo_create_depth_buffer width height))
-	  (fboid:i32* (salloc))
-	  (fbo:E_fbo* (halloc))) ;; heap alloc
+          (depthid (fbo_create_depth_buffer width height))
+          (fboid:i32* (salloc))
+          (fbo:E_fbo* (halloc))) ;; heap alloc
       (glGenFramebuffers 1 fboid)
       ;; bind the fbo
       (glBindFramebuffer GL_FRAMEBUFFER (pref fboid 0))
@@ -412,8 +412,8 @@
 
       (tfill! fbo (pref fboid 0) texid depthid width height)
       (let ((status:i32 (glCheckFramebufferStatus GL_FRAMEBUFFER)))
-	(if (<> status GL_FRAMEBUFFER_COMPLETE)
-	    (set! fbo (cast null E_fbo*))))
+        (if (<> status GL_FRAMEBUFFER_COMPLETE)
+            (set! fbo (cast null E_fbo*))))
 
       (glClearColor 0.0 1.0 0.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
@@ -428,8 +428,8 @@
 (bind-func create-fbo-no-depth
   (lambda (width:i32 height:i32 _texid:i32)
     (let ((texid (fbo_create_texture width height))
-	  (fboid:i32* (salloc))
-	  (fbo:E_fbo* (halloc))) ;; heap alloc
+          (fboid:i32* (salloc))
+          (fbo:E_fbo* (halloc))) ;; heap alloc
       (glGenFramebuffers 1 fboid)
       ;; bind the fbo
       (glBindFramebuffer GL_FRAMEBUFFER (pref fboid 0))
@@ -442,8 +442,8 @@
 
       (tfill! fbo (pref fboid 0) texid -1 width height)
       (let ((status:i32 (glCheckFramebufferStatus GL_FRAMEBUFFER)))
-	(if (<> status GL_FRAMEBUFFER_COMPLETE)
-	    (set! fbo (cast null E_fbo*))))
+        (if (<> status GL_FRAMEBUFFER_COMPLETE)
+            (set! fbo (cast null E_fbo*))))
 
       (glClearColor 0.0 1.0 0.0 1.0)
       (glClear GL_COLOR_BUFFER_BIT)
@@ -459,9 +459,9 @@
 (bind-func create-fbo-sqr
   (lambda (width:i32 height:i32 _texid:i32 _depthid:i32)
     (let ((texid (fbo_create_texture_sqr width height))
-	  (depthid (fbo_create_depth_buffer_sqr width height))
-	  (fboid:i32* (salloc))
-	  (fbo:E_fbo* (halloc))) ;; heap alloc
+          (depthid (fbo_create_depth_buffer_sqr width height))
+          (fboid:i32* (salloc))
+          (fbo:E_fbo* (halloc))) ;; heap alloc
       (glGenFramebuffers 1 fboid)
       ;; bind the fbo
       (glBindFramebuffer GL_FRAMEBUFFER (pref fboid 0))
@@ -477,9 +477,9 @@
 
       (tfill! fbo (pref fboid 0) texid depthid width height)
       (let ((status:i32 (glCheckFramebufferStatus GL_FRAMEBUFFER)))
-	(printf "fb status %d\n" status)
-	(if (<> status GL_FRAMEBUFFER_COMPLETE)
-	    (set! fbo (cast null E_fbo*))))
+        (printf "fb status %d\n" status)
+        (if (<> status GL_FRAMEBUFFER_COMPLETE)
+            (set! fbo (cast null E_fbo*))))
 
       (glClearColor 0.0 1.0 0.0 1.0)
       (glClear (+ GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT))
@@ -495,8 +495,8 @@
 (bind-func create-fbo-sqr-no-depth
   (lambda (width:i32 height:i32 _texid:i32)
     (let ((texid (fbo_create_texture_sqr width height))
-	  (fboid:i32* (salloc))
-	  (fbo:E_fbo* (halloc))) ;; heap alloc
+          (fboid:i32* (salloc))
+          (fbo:E_fbo* (halloc))) ;; heap alloc
       (glGenFramebuffers 1 fboid)
       ;; bind the fbo
       (glBindFramebuffer GL_FRAMEBUFFER (pref fboid 0))
@@ -507,9 +507,9 @@
 
       (tfill! fbo (pref fboid 0) texid -1 width height)
       (let ((status:i32 (glCheckFramebufferStatus GL_FRAMEBUFFER)))
-	(printf "fb status %d\n" status)
-	(if (<> status GL_FRAMEBUFFER_COMPLETE)
-	    (set! fbo (cast null E_fbo*))))
+        (printf "fb status %d\n" status)
+        (if (<> status GL_FRAMEBUFFER_COMPLETE)
+            (set! fbo (cast null E_fbo*))))
 
       (glClearColor 0.0 1.0 0.0 1.0)
       (glClear GL_COLOR_BUFFER_BIT)
@@ -524,61 +524,61 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Shader helpers
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; a couple of shader helper functions
 (bind-func print-shader-info-log
   (lambda (obj:i32)
     (let ((infologLength (salloc 1 i32))
-	  (charsWritten (salloc 1 i32)))
+          (charsWritten (salloc 1 i32)))
       (glGetShaderiv obj GL_INFO_LOG_LENGTH infologLength)
       (if (> (pref infologLength 0) 1)
-	  (let ((log (bitcast (malloc (i32toi64 (pref infologLength 0))) i8*)))
-	    (glGetShaderInfoLog obj (pref infologLength 0) charsWritten log)
-	    (printf "printShaderInfoLog: %s\n" log)
-	    (free log)
-	    1)
-	  (begin (printf "Shader Info log: OK\n") 1)))))
+          (let ((log (bitcast (malloc (i32toi64 (pref infologLength 0))) i8*)))
+            (glGetShaderInfoLog obj (pref infologLength 0) charsWritten log)
+            (printf "printShaderInfoLog: %s\n" log)
+            (free log)
+            1)
+          (begin (printf "Shader Info log: OK\n") 1)))))
 
 (bind-func print-program-info-log
   (lambda (obj:i32)
     (let ((infologLength (salloc 1 i32))
-	  (charsWritten (salloc 1 i32)))
+          (charsWritten (salloc 1 i32)))
       (glGetProgramiv obj GL_INFO_LOG_LENGTH infologLength)
       (if (> (pref infologLength 0) 1)
-	  (let ((log (bitcast (malloc (i32toi64 (pref infologLength 0))) i8*)))
-	    (glGetProgramInfoLog obj (pref infologLength 0) charsWritten log)
-	    (printf "printProgramInfoLog: %s\n" log)
-	    (free log)
-	    1)
-	  (begin (printf "Program Info log: OK\n") 1)))))
+          (let ((log (bitcast (malloc (i32toi64 (pref infologLength 0))) i8*)))
+            (glGetProgramInfoLog obj (pref infologLength 0) charsWritten log)
+            (printf "printProgramInfoLog: %s\n" log)
+            (free log)
+            1)
+          (begin (printf "Program Info log: OK\n") 1)))))
 
 ;; load shader (vert and frag shader)
 (bind-func create-shader
   (lambda (vsource:i8* fsource:i8*)
     (let ((fshader (glCreateShader GL_FRAGMENT_SHADER))
-	  (vshader (glCreateShader GL_VERTEX_SHADER))
-	  (fcode:|1,i8*|* (salloc 1))
-	  (vcode:|1,i8*|* (salloc 1))
-	  (program (glCreateProgram))
-	  (temp:i32* (salloc 1)))
+          (vshader (glCreateShader GL_VERTEX_SHADER))
+          (fcode:|1,i8*|* (salloc 1))
+          (vcode:|1,i8*|* (salloc 1))
+          (program (glCreateProgram))
+          (temp:i32* (salloc 1)))
       (pset! fcode 0 fsource)
-      (pset! vcode 0 vsource)      
+      (pset! vcode 0 vsource)
       (glShaderSource fshader 1 (cast fcode i8**) (bitcast null i32*))
-      (glShaderSource vshader 1 (cast vcode i8**) (bitcast null i32*))      
+      (glShaderSource vshader 1 (cast vcode i8**) (bitcast null i32*))
       (glCompileShader fshader)
-      (glCompileShader vshader))    
-      (glAttachShader program fshader)
-      (glAttachShader program vshader)      
-      (glLinkProgram program)
-      (print-shader-info-log fshader)
-      (print-shader-info-log vshader)
-      (print-program-info-log program)
-      program))
+      (glCompileShader vshader))
+    (glAttachShader program fshader)
+    (glAttachShader program vshader)
+    (glLinkProgram program)
+    (print-shader-info-log fshader)
+    (print-shader-info-log vshader)
+    (print-program-info-log program)
+    program))
 
-      
-	  
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;  GL DRAWING STUFF (deprecated use cairo)
@@ -593,8 +593,8 @@
       (glLineWidth 3.0)
       (glBegin GL_LINE_LOOP)
       (dotimes (k 90.0)
-	(let ((angle:double (/ (* k 2.0 PI) 90.0)))
-	  (glVertex2d (+ x (* (cos angle) radius)) (+ y (* (sin angle) radius)))))
+        (let ((angle:double (/ (* k 2.0 PI) 90.0)))
+          (glVertex2d (+ x (* (cos angle) radius)) (+ y (* (sin angle) radius)))))
       (glEnd))))
 
 (bind-func circle-whole
@@ -602,57 +602,57 @@
     (let ((k 0.0))
       (glBegin GL_TRIANGLE_FAN)
       (dotimes (k 90.0)
-	(let ((angle:double (/ (* k 2.0 PI) 90.0)))
-	  (glVertex2d (+ x (* (cos angle) radius)) (+ y (* (sin angle) radius)))))
+        (let ((angle:double (/ (* k 2.0 PI) 90.0)))
+          (glVertex2d (+ x (* (cos angle) radius)) (+ y (* (sin angle) radius)))))
       (glEnd))))
 
 (bind-func cube-whole
   (let ((dlist -1))
     (lambda ()
       (if (> dlist -1)
-	  (begin (glCallList dlist) 1)
-	  (begin (set! dlist (glGenLists 1))
-		 (glNewList dlist (+ GL_COMPILE 1))
-		 (glBegin GL_QUADS)
-		 ;; Front face
-		 (glNormal3d 0.0 0.0 1.0)
-		 (glVertex3d 0.0 0.0  1.0)
-		 (glVertex3d 1.0 0.0  1.0)
-		 (glVertex3d 1.0  1.0  1.0)
-		 (glVertex3d 0.0  1.0  1.0)
-		 ;; Back face
-		 (glNormal3d 0.0 0.0 -1.0)
-		 (glVertex3d 0.0 0.0 0.0)
-		 (glVertex3d 0.0  1.0 0.0)
-		 (glVertex3d 1.0  1.0 0.0)
-		 (glVertex3d 1.0 0.0 0.0)
-		 ;; Top face
-		 (glNormal3d 0.0 1.0 0.0)
-		 (glVertex3d 0.0  1.0 0.0)
-		 (glVertex3d 0.0  1.0  1.0)
-		 (glVertex3d 1.0  1.0  1.0)
-		 (glVertex3d 1.0  1.0 0.0)
-		 ;; Bottom face
-		 (glNormal3d 0.0 -1.0 0.0)
-		 (glVertex3d 0.0 0.0 0.0)
-		 (glVertex3d 1.0 0.0 0.0)
-		 (glVertex3d 1.0 0.0  1.0)
-		 (glVertex3d 0.0 0.0  1.0)
-		 ;; Right face
-		 (glNormal3d 1.0 0.0 0.0)
-		 (glVertex3d 1.0 0.0 0.0)
-		 (glVertex3d 1.0  1.0 0.0)
-		 (glVertex3d 1.0  1.0  1.0)
-		 (glVertex3d 1.0 0.0  1.0)
-		 ;; Left face
-		 (glNormal3d -1.0 0.0 0.0)
-		 (glVertex3d 0.0 0.0 0.0)
-		 (glVertex3d 0.0 0.0  1.0)
-		 (glVertex3d 0.0  1.0  1.0)
-		 (glVertex3d 0.0  1.0 0.0)
-		 (glEnd)
-		 (glEndList)
-		 1)))))
+          (begin (glCallList dlist) 1)
+          (begin (set! dlist (glGenLists 1))
+                 (glNewList dlist (+ GL_COMPILE 1))
+                 (glBegin GL_QUADS)
+                 ;; Front face
+                 (glNormal3d 0.0 0.0 1.0)
+                 (glVertex3d 0.0 0.0  1.0)
+                 (glVertex3d 1.0 0.0  1.0)
+                 (glVertex3d 1.0  1.0  1.0)
+                 (glVertex3d 0.0  1.0  1.0)
+                 ;; Back face
+                 (glNormal3d 0.0 0.0 -1.0)
+                 (glVertex3d 0.0 0.0 0.0)
+                 (glVertex3d 0.0  1.0 0.0)
+                 (glVertex3d 1.0  1.0 0.0)
+                 (glVertex3d 1.0 0.0 0.0)
+                 ;; Top face
+                 (glNormal3d 0.0 1.0 0.0)
+                 (glVertex3d 0.0  1.0 0.0)
+                 (glVertex3d 0.0  1.0  1.0)
+                 (glVertex3d 1.0  1.0  1.0)
+                 (glVertex3d 1.0  1.0 0.0)
+                 ;; Bottom face
+                 (glNormal3d 0.0 -1.0 0.0)
+                 (glVertex3d 0.0 0.0 0.0)
+                 (glVertex3d 1.0 0.0 0.0)
+                 (glVertex3d 1.0 0.0  1.0)
+                 (glVertex3d 0.0 0.0  1.0)
+                 ;; Right face
+                 (glNormal3d 1.0 0.0 0.0)
+                 (glVertex3d 1.0 0.0 0.0)
+                 (glVertex3d 1.0  1.0 0.0)
+                 (glVertex3d 1.0  1.0  1.0)
+                 (glVertex3d 1.0 0.0  1.0)
+                 ;; Left face
+                 (glNormal3d -1.0 0.0 0.0)
+                 (glVertex3d 0.0 0.0 0.0)
+                 (glVertex3d 0.0 0.0  1.0)
+                 (glVertex3d 0.0  1.0  1.0)
+                 (glVertex3d 0.0  1.0 0.0)
+                 (glEnd)
+                 (glEndList)
+                 1)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;

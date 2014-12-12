@@ -6,16 +6,16 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 (define gstlib
   (sys:open-dylib (if (string=? "Linux" (sys:platform))
-		      "libgstreamer-0.10.so"
-		      (if (string=? "Windows" (sys:platform))
-			  (print-error "Where can I find gstreamer on your platform?")
-			  (print-error "Where can I find gstreamer on your platform?")))))
+                      "libgstreamer-0.10.so"
+                      (if (string=? "Windows" (sys:platform))
+                          (print-error "Where can I find gstreamer on your platform?")
+                          (print-error "Where can I find gstreamer on your platform?")))))
 
 (if (not gstlib) (print-error 'Could 'not load 'gstream 'dynamic 'library))
 
@@ -99,7 +99,7 @@
 (bind-alias GstPipeline i8) ;; opaque struct
 (bind-alias GstBin i8) ;; opaque struct
 (bind-alias GstPad i8) ;; opaque struct
-;(bind-alias GstObject i8) ;; opaque struct
+                                        ;(bind-alias GstObject i8) ;; opaque struct
 (bind-alias GstEvent i8) ;; opaque struct
 (bind-alias GstBufferPrivate i8) ;; opaque
 (bind-alias GstClockTime i64)
@@ -138,7 +138,7 @@
 (bind-lib gstlib gst_element_factory_create [GstElement*,GstElementFactory*,gchar*]*)
 (bind-lib gstlib gst_element_factory_find [GstElementFactory*,gchar*]*)
 
-;; pipeline 
+;; pipeline
 (bind-lib gstlib gst_pipeline_new [GstElement*,gchar*]*)
 (bind-lib gstlib gst_pipeline_get_bus [GstBus*,GstPipeline*]*)
 (bind-lib gstlib gst_pipeline_set_clock [gboolean,GstPipeline*,GstClock*]*)
@@ -195,4 +195,4 @@
 (bind-lib gstlib gst_value_dup_mini_object [GstMiniObject*,GValue*]*)
 
 
-;(bind-lib gstlib gst_video_convert_frame [GstBuffer*,GstBuffer*,GstCaps*,GstClockTime,GError**]*)
+                                        ;(bind-lib gstlib gst_video_convert_frame [GstBuffer*,GstBuffer*,GstCaps*,GstClockTime,GError**]*)

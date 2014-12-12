@@ -6,7 +6,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -14,7 +14,7 @@
 (define kernel32 (sys:open-dylib "Kernel32.dll"))
 
 (if (or (eq? #f kernel32)
-	(null? kernel32))
+        (null? kernel32))
     (print-error "Error loading kernel32 lib"))
 
 (bind-alias HANDLE i8*)

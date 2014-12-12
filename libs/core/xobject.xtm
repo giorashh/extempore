@@ -18,7 +18,7 @@
 (bind-func xobj_database
   (let ((aa:i8* (alloc))
         (db (xlist (xpair "____" (xlist (xpair "____" (cast null i8*)))))))
-    ;; (xinsert db 1 (xpair "class_test" (xlist (xpair "method_test" (cast null i8*)))))    
+    ;; (xinsert db 1 (xpair "class_test" (xlist (xpair "method_test" (cast null i8*)))))
     (lambda ()
       db)))
 
@@ -112,8 +112,8 @@
                                              (string-append obj_name
                                                             "_1:[" obj_type "*]*"))
                                  `(lambda () (let ((obj (halloc)))
-                                          (tset! obj 0 ,(symbol->string name))
-                                          obj))))
+                                               (tset! obj 0 ,(symbol->string name))
+                                               obj))))
              (constructor1poly (list 'bind-poly 'xobj_build (string->symbol (string-append obj_name "_1"))))
              (constructor2 (list 'bind-func (string->symbol
                                              (string-append obj_name
@@ -142,9 +142,9 @@
                            slots
                            (make-list-with-proc (length slots) (lambda (i) i))))
              (getterpolys (map (lambda (s) (list 'bind-poly
-                                            (string->symbol (string-append "xobj_get_" (car s)))
-                                            (string->symbol (string-append obj_name "_get_" (car s)))))
-                               slots))                           
+                                                 (string->symbol (string-append "xobj_get_" (car s)))
+                                                 (string->symbol (string-append obj_name "_get_" (car s)))))
+                               slots))
              (setters (map (lambda (s idx)
                              (list 'bind-func (string->symbol
                                                (string-append obj_name "_set_" (car s) ":"
@@ -155,12 +155,12 @@
                            slots
                            (make-list-with-proc (length slots) (lambda (i) i))))
              (setterpolys (map (lambda (s) (list 'bind-poly
-                                            (string->symbol (string-append "xobj_set_" (car s)))
-                                            (string->symbol (string-append obj_name "_set_" (car s)))))
-                               slots)))         
+                                                 (string->symbol (string-append "xobj_set_" (car s)))
+                                                 (string->symbol (string-append obj_name "_set_" (car s)))))
+                               slots)))
         (eval bindtype (interaction-environment))
         (eval constructor1 (interaction-environment))
-        ;;(println constructor1)        
+        ;;(println constructor1)
         (eval constructor1poly (interaction-environment))
         (eval constructor2 (interaction-environment))
         ;;(println constructor2)
@@ -185,13 +185,13 @@
                          (print-error 'Compiler 'Error: 'you 'must 'give 'the 'method 'a 'type)
                          (impc:ir:get-type-from-pretty-str (cadr method_))))
          (adjusttypea (cons (car methodtype)
-                              (cons (cadr methodtype)
-                                    (cons (string->symbol (string-append "xobject_t*"))
-                                          (cddr methodtype)))))
+                            (cons (cadr methodtype)
+                                  (cons (string->symbol (string-append "xobject_t*"))
+                                        (cddr methodtype)))))
          (adjusttype (cons (car methodtype)
-                              (cons (cadr methodtype)
-                                    (cons (string->symbol (string-append "xobj_" classname "_t*"))
-                                          (cddr methodtype)))))
+                           (cons (cadr methodtype)
+                                 (cons (string->symbol (string-append "xobj_" classname "_t*"))
+                                       (cddr methodtype)))))
          (f1 `(bind-func ,(string->symbol
                            (string-append "xobj_" classname "_" methodname ":"
                                           (impc:ir:pretty-print-type adjusttypea)))
@@ -209,7 +209,7 @@
                                                              (cddr methodtype)))))))
                 (lambda ,(cons 'obj (cadr def))
                   (let ((class:i8* (tref obj 0))
-                        ;(self (cast obj ,(string->symbol (string-append "xobj_" classname "_t*"))))
+                                        ;(self (cast obj ,(string->symbol (string-append "xobj_" classname "_t*"))))
                         ;;(f:[i64,i64,i64]* (xobj_get_method class ,methodname)))
                         (,(string->symbol (string-append "f:" (impc:ir:pretty-print-type adjusttypea)))
                          (cast (xobj_get_method class ,methodname))))
@@ -230,10 +230,10 @@
                                                              (cddr methodtype)))))))
                 (lambda ,(cons 'obj (cadr def))
                   (let ((class:i8* (tref obj 0))
-                        ;(self (cast obj ,(string->symbol (string-append "xobj_" classname "_t*"))))
+                                        ;(self (cast obj ,(string->symbol (string-append "xobj_" classname "_t*"))))
                         (,(string->symbol (string-append "f:" (impc:ir:pretty-print-type adjusttypea)))
                          (cast (xobj_get_method class ,methodname))))
-                        ;;(f:[i64,i64,i64]* (xobj_get_method class ,methodname)))
+                    ;;(f:[i64,i64,i64]* (xobj_get_method class ,methodname)))
                     (if (null? f)
                         (begin (printf
                                 ,(string-append "Runtime Error: no method '" methodname "' for class '%s'\\n")
@@ -243,17 +243,17 @@
                                     '(convert null)))
                         ,(cons 'f (cons '(cast obj) (cadr def)))))))))
 
-    ;;(println f1)    
+    ;;(println f1)
     (eval f1 (interaction-environment))
     (if (not (llvm:get-function (string-append "xobj_global_" methodname)))
         (begin
-          ;; (println f2)          
+          ;; (println f2)
           (eval f2 (interaction-environment))
           (eval (list 'bind-poly
                       (string->symbol (string-append "xobj_" methodname))
                       (string->symbol (string-append "xobj_global_" methodname)))
                 (interaction-environment))))
-    ;; (println f3)    
+    ;; (println f3)
     (eval f3 (interaction-environment))
     (eval (list 'bind-poly
                 (string->symbol (string-append "xobj_" methodname))

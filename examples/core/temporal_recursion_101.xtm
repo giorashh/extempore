@@ -19,9 +19,9 @@
   (tr t " b" (* 2 44100))
   (tr t "  c" 44100))
 
-;
-; metro also works
-;
+                                        ;
+                                        ; metro also works
+                                        ;
 (define metro-test
   (lambda (beat x dur)
     (println x beat)

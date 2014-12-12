@@ -73,7 +73,7 @@
       (printf "[")
       (printf "% f" (pref v 0))
       (dotimes (i (- lgth 1))
-	(printf ",% f" (pref v (+ i 1))))
+        (printf ",% f" (pref v (+ i 1))))
       (printf "]\n")
       void)))
 
@@ -83,7 +83,7 @@
       (printf "[")
       (printf "% f" (ftod (pref v 0)))
       (dotimes (i (- lgth 1))
-	(printf ",% f" (ftod (pref v (+ i 1)))))
+        (printf ",% f" (ftod (pref v (+ i 1)))))
       (printf "]\n")
       void)))
 
@@ -93,23 +93,23 @@
 (bind-func vnormd
   (lambda (v:double* lgth:i64 n:double*)
     (let ((mag 0.0)
-	  (i 0))
+          (i 0))
       (dotimes (i lgth)
-	(set! mag (+ mag (* (pref v i) (pref v i)))))
+        (set! mag (+ mag (* (pref v i) (pref v i)))))
       (set! mag (sqrt mag))
       (dotimes (i lgth)
-	(pset! n i (/ (pref v i) mag)))
+        (pset! n i (/ (pref v i) mag)))
       void)))
 
 (bind-func vnormf
   (lambda (v:float* lgth:i64 n:float*)
     (let ((mag 0.0)
-	  (i 0))
+          (i 0))
       (dotimes (i lgth)
-	(set! mag (+ mag (* (pref v i) (pref v i)))))
+        (set! mag (+ mag (* (pref v i) (pref v i)))))
       (set! mag (sqrtf mag))
       (dotimes (i lgth)
-	(pset! n i (/ (pref v i) mag)))
+        (pset! n i (/ (pref v i) mag)))
       void)))
 
 (bind-poly vnorm vnormd)
@@ -118,17 +118,17 @@
 (bind-func vmagd
   (lambda (v:double* lgth:i64)
     (let ((mag 0.0)
-	  (i 0))
+          (i 0))
       (dotimes (i lgth)
-	(set! mag (+ mag (* (pref v i) (pref v i)))))
+        (set! mag (+ mag (* (pref v i) (pref v i)))))
       (sqrt mag))))
 
 (bind-func vmagf
   (lambda (v:float* lgth:i64)
     (let ((mag 0.0)
-	  (i 0))
+          (i 0))
       (dotimes (i lgth)
-	(set! mag (+ mag (* (pref v i) (pref v i)))))
+        (set! mag (+ mag (* (pref v i) (pref v i)))))
       (sqrtf mag))))
 
 (bind-poly vmag vmagd)
@@ -138,17 +138,17 @@
   (let ((i 0))
     (lambda (v1:double* v2:double* lgth:i64)
       (let ((res 0.0))
-	(dotimes (i lgth)
-	  (set! res (+ res (* (pref v1 i) (pref v2 i)))))
-	res))))
+        (dotimes (i lgth)
+          (set! res (+ res (* (pref v1 i) (pref v2 i)))))
+        res))))
 
 (bind-func vdotf
   (let ((i 0))
     (lambda (v1:float* v2:float* lgth:i64)
       (let ((res 0.0))
-	(dotimes (i lgth)
-	  (set! res (+ res (* (pref v1 i) (pref v2 i)))))
-	res))))
+        (dotimes (i lgth)
+          (set! res (+ res (* (pref v1 i) (pref v2 i)))))
+        res))))
 
 (bind-poly vdot vdotd)
 (bind-poly vdot vdotf)
@@ -157,14 +157,14 @@
   (lambda (s:double v1:double* lgth:i64 v2:double*)
     (let ((i 0))
       (dotimes (i lgth)
-	(pset! v2 i (* s (pref v1 i))))
+        (pset! v2 i (* s (pref v1 i))))
       void)))
 
 (bind-func vsmulf
   (lambda (s:float v1:float* lgth:i64 v2:float*)
     (let ((i 0))
       (dotimes (i lgth)
-	(pset! v2 i (* s (pref v1 i))))
+        (pset! v2 i (* s (pref v1 i))))
       void)))
 
 (bind-poly vsmul vsmuld)
@@ -174,14 +174,14 @@
   (lambda (s:double v1:double* lgth:i64 v2:double*)
     (let ((i 0))
       (dotimes (i lgth)
-	(pset! v2 i (/ (pref v1 i) s)))
+        (pset! v2 i (/ (pref v1 i) s)))
       void)))
 
 (bind-func vsdivf
   (lambda (s:float v1:float* lgth:i64 v2:float*)
     (let ((i 0))
       (dotimes (i lgth)
-	(pset! v2 i (/ (pref v1 i) s)))
+        (pset! v2 i (/ (pref v1 i) s)))
       void)))
 
 (bind-poly vsdiv vsdivd)
@@ -191,14 +191,14 @@
   (let ((i 0))
     (lambda (v1:double* v2:double* lgth:i64 v3:double*)
       (dotimes (i lgth)
-	(pset! v3 i (+ (pref v1 i) (pref v2 i))))
+        (pset! v3 i (+ (pref v1 i) (pref v2 i))))
       void)))
-	
+
 (bind-func vsumf
   (let ((i 0))
     (lambda (v1:float* v2:float* lgth:i64 v3:float*)
       (dotimes (i lgth)
-	(pset! v3 i (+ (pref v1 i) (pref v2 i))))
+        (pset! v3 i (+ (pref v1 i) (pref v2 i))))
       void)))
 
 (bind-poly vsum vsumd)
@@ -208,31 +208,31 @@
   (let ((i 0))
     (lambda (v1:double* v2:double* lgth:i64 v3:double*)
       (dotimes (i lgth)
-	(pset! v3 i (- (pref v1 i) (pref v2 i))))
+        (pset! v3 i (- (pref v1 i) (pref v2 i))))
       void)))
 
 (bind-func vsubf
   (let ((i 0))
     (lambda (v1:float* v2:float* lgth:i64 v3:float*)
       (dotimes (i lgth)
-	(pset! v3 i (- (pref v1 i) (pref v2 i))))
+        (pset! v3 i (- (pref v1 i) (pref v2 i))))
       void)))
 
 (bind-poly vsub vsubd)
 (bind-poly vsub vsubf)
 
-(bind-func vmuld  
+(bind-func vmuld
   (let ((i 0))
     (lambda (v1:double* v2:double* lgth:i64 v3:double*)
       (dotimes (i lgth)
-	(pset! v3 i (* (pref v1 i) (pref v2 i))))
+        (pset! v3 i (* (pref v1 i) (pref v2 i))))
       void)))
 
 (bind-func vmulf
   (let ((i 0))
     (lambda (v1:float* v2:float* lgth:i64 v3:float*)
       (dotimes (i lgth)
-	(pset! v3 i (* (pref v1 i) (pref v2 i))))
+        (pset! v3 i (* (pref v1 i) (pref v2 i))))
       void)))
 
 (bind-poly vmul vmuld)
@@ -241,17 +241,17 @@
 (bind-func vmagd
   (lambda (v:double* lgth:i64)
     (let ((mag 0.0)
-	  (i 0))
+          (i 0))
       (dotimes (i lgth)
-	(set! mag (+ mag (* (pref v i) (pref v i)))))
+        (set! mag (+ mag (* (pref v i) (pref v i)))))
       (sqrt mag))))
 
 (bind-func vmagf
   (lambda (v:float* lgth:i64)
     (let ((mag 0.0)
-	  (i 0))
+          (i 0))
       (dotimes (i lgth)
-	(set! mag (+ mag (* (pref v i) (pref v i)))))
+        (set! mag (+ mag (* (pref v i) (pref v i)))))
       (sqrtf mag))))
 
 
@@ -272,10 +272,10 @@
 (bind-func vaquatd
   (lambda (angle:double v:double* quat:double*)
     (let ((m (vmagd v 3))
-	  (s (/ (sin (* 0.5 angle)) m)))
+          (s (/ (sin (* 0.5 angle)) m)))
       (pfill! quat
-	      (* (pref v 0) s) (* (pref v 1) s) (* (pref v 2) s)
-	      (cos (* 0.5 angle)))
+              (* (pref v 0) s) (* (pref v 1) s) (* (pref v 2) s)
+              (cos (* 0.5 angle)))
       void)))
 
 ;; angle in rads
@@ -284,15 +284,15 @@
 (bind-func vaquatf
   (lambda (angle:float v:float* quat:float*)
     (let ((m (vmagf v 3))
-	  (s (/ (sinf (* 0.5 angle)) m)))
+          (s (/ (sinf (* 0.5 angle)) m)))
       (pfill! quat
-	      (* (pref v 0) s) (* (pref v 1) s) (* (pref v 2) s)
-	      (cosf (* 0.5 angle)))
+              (* (pref v 0) s) (* (pref v 1) s) (* (pref v 2) s)
+              (cosf (* 0.5 angle)))
       void)))
 
 (bind-poly vaquat vaquatd)
 (bind-poly vaquat vaquatf)
-      	
+
 
 ;;;;;;;;;; MATRIX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -382,73 +382,73 @@
 (bind-func mmuld
   (lambda (ma:double* r1:i64 c1:i64 mb:double* r2:i64 c2:i64 mc:double*)
     (if (= c1 r2)
-	(let ((r 0) (c 0) (k 0))
-	  (dotimes (r r1)
-	    (dotimes (c c2)
-	      (pset! mc (+ c (* r c2)) 0.0)
-	      (dotimes (k c1)
-		(pset! mc (+ c (* r c2))
-		       (+ (pref mc (+ c (* r c2)))
-			  (* (pref ma (+ k (* r c1)))
-			     (pref mb (+ (* k c2) c))))))))
-	  mc)
-	(begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
-		       r1 c1 r2 c2)
-	       (cast null double*)))))
+        (let ((r 0) (c 0) (k 0))
+          (dotimes (r r1)
+            (dotimes (c c2)
+              (pset! mc (+ c (* r c2)) 0.0)
+              (dotimes (k c1)
+                (pset! mc (+ c (* r c2))
+                       (+ (pref mc (+ c (* r c2)))
+                          (* (pref ma (+ k (* r c1)))
+                             (pref mb (+ (* k c2) c))))))))
+          mc)
+        (begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
+                       r1 c1 r2 c2)
+               (cast null double*)))))
 
 ;; matrix multiplication (floats)
 (bind-func mmulf
   (lambda (ma:float* r1:i64 c1:i64 mb:float* r2:i64 c2:i64 mc:float*)
     (if (= c1 r2)
-	(let ((r 0) (c 0) (k 0))
-	  (dotimes (r r1)
-	    (dotimes (c c2)
-	      (pset! mc (+ c (* r c2)) 0.0)
-	      (dotimes (k c1)
-		(pset! mc (+ c (* r c2))
-		       (+ (pref mc (+ c (* r c2)))
-			  (* (pref ma (+ k (* r c1)))
-			     (pref mb (+ (* k c2) c))))))))
-	  mc)
-	(begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
-		       r1 c1 r2 c2)
-	       (cast null float*)))))
+        (let ((r 0) (c 0) (k 0))
+          (dotimes (r r1)
+            (dotimes (c c2)
+              (pset! mc (+ c (* r c2)) 0.0)
+              (dotimes (k c1)
+                (pset! mc (+ c (* r c2))
+                       (+ (pref mc (+ c (* r c2)))
+                          (* (pref ma (+ k (* r c1)))
+                             (pref mb (+ (* k c2) c))))))))
+          mc)
+        (begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
+                       r1 c1 r2 c2)
+               (cast null float*)))))
 
 ;; matrix multiplication (i64)
 (bind-func mmuli64
   (lambda (ma:i64* r1:i64 c1:i64 mb:i64* r2:i64 c2:i64 mc:i64*)
     (if (= c1 r2)
-	(let ((r 0) (c 0) (k 0))
-	  (dotimes (r r1)
-	    (dotimes (c c2)
-	      (pset! mc (+ c (* r c2)) 0)
-	      (dotimes (k c1)
-		(pset! mc (+ c (* r c2))
-		       (+ (pref mc (+ c (* r c2)))
-			  (* (pref ma (+ k (* r c1)))
-			     (pref mb (+ (* k c2) c))))))))
-	  mc)
-	(begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
-		       r1 c1 r2 c2)
-	       (cast null i64*)))))
+        (let ((r 0) (c 0) (k 0))
+          (dotimes (r r1)
+            (dotimes (c c2)
+              (pset! mc (+ c (* r c2)) 0)
+              (dotimes (k c1)
+                (pset! mc (+ c (* r c2))
+                       (+ (pref mc (+ c (* r c2)))
+                          (* (pref ma (+ k (* r c1)))
+                             (pref mb (+ (* k c2) c))))))))
+          mc)
+        (begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
+                       r1 c1 r2 c2)
+               (cast null i64*)))))
 
 ;; matrix multiplication (i32)
 (bind-func mmuli32
   (lambda (ma:i32* r1:i64 c1:i64 mb:i32* r2:i64 c2:i64 mc:i32*)
     (if (= c1 r2)
-	(let ((r 0) (c 0) (k 0))
-	  (dotimes (r r1)
-	    (dotimes (c c2)
-	      (pset! mc (+ c (* r c2)) 0)
-	      (dotimes (k c1)
-		(pset! mc (+ c (* r c2))
-		       (+ (pref mc (+ c (* r c2)))
-			  (* (pref ma (+ k (* r c1)))
-			     (pref mb (+ (* k c2) c))))))))
-	  mc)
-	(begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
-		       r1 c1 r2 c2)
-	       (cast null i32*)))))
+        (let ((r 0) (c 0) (k 0))
+          (dotimes (r r1)
+            (dotimes (c c2)
+              (pset! mc (+ c (* r c2)) 0)
+              (dotimes (k c1)
+                (pset! mc (+ c (* r c2))
+                       (+ (pref mc (+ c (* r c2)))
+                          (* (pref ma (+ k (* r c1)))
+                             (pref mb (+ (* k c2) c))))))))
+          mc)
+        (begin (printf "bad matrix multiplication [%lld,%lld]*[%lld,%lld]\n"
+                       r1 c1 r2 c2)
+               (cast null i32*)))))
 
 (bind-poly mmul mmuld)
 (bind-poly mmul mmulf)
@@ -460,9 +460,9 @@
   (lambda (ma:double* r1:i64 c1:i64 mb:double*)
     (let ((i 0) (j 0))
       (dotimes (i r1)
-	(dotimes (j c1)
-	  (pset! mb (+ (* j c1) i)
-		 (pref ma (+ (* i c1) j)))))
+        (dotimes (j c1)
+          (pset! mb (+ (* j c1) i)
+                 (pref ma (+ (* i c1) j)))))
       mb)))
 
 ;; matrix transposition (floats)
@@ -470,9 +470,9 @@
   (lambda (ma:float* r1:i64 c1:i64 mb:float*)
     (let ((i 0) (j 0))
       (dotimes (i r1)
-	(dotimes (j c1)
-	  (pset! mb (+ (* j c1) i)
-		 (pref ma (+ (* i c1) j)))))
+        (dotimes (j c1)
+          (pset! mb (+ (* j c1) i)
+                 (pref ma (+ (* i c1) j)))))
       mb)))
 
 (bind-poly mtrans mtransd)
@@ -483,56 +483,56 @@
 (bind-func mdetrmd
   (lambda (ma:double* k:i64)
     (if (= k 1) (pref ma 0)
-	(let ((det:double 0.0) (s:double 1.0)
-	      (c 0) (i 0) (j 0) (m 0) (n 0)
-	      (mb:double* (salloc (* k k))))
-	  (dotimes (c k)
-	    (set! m 0) (set! n 0)
-	    (dotimes (i k)
-	      (dotimes (j k)
-		(pset! mb (+ (* i k) j) 0.0)
-		(if (and (<> i 0) (<> j c))
-		    (begin
-		      (pset! mb (+ (* m (- k 1)) n)
-			     (pref ma (+ (* i k) j)))
-		      (if (< n (- k 2))
-			  (set! n (+ n 1))
-			  (begin
-			    (set! n 0)
-			    (set! m (+ m 1)))))
-		    (begin 1))))
-	    (set! det (+ det (* s (* (pref ma c)
-				     (mdetrmd mb (- k 1))))))
-	    (set! s (* -1.0 s)))
-	  det))))
+        (let ((det:double 0.0) (s:double 1.0)
+              (c 0) (i 0) (j 0) (m 0) (n 0)
+              (mb:double* (salloc (* k k))))
+          (dotimes (c k)
+            (set! m 0) (set! n 0)
+            (dotimes (i k)
+              (dotimes (j k)
+                (pset! mb (+ (* i k) j) 0.0)
+                (if (and (<> i 0) (<> j c))
+                    (begin
+                      (pset! mb (+ (* m (- k 1)) n)
+                             (pref ma (+ (* i k) j)))
+                      (if (< n (- k 2))
+                          (set! n (+ n 1))
+                          (begin
+                            (set! n 0)
+                            (set! m (+ m 1)))))
+                    (begin 1))))
+            (set! det (+ det (* s (* (pref ma c)
+                                     (mdetrmd mb (- k 1))))))
+            (set! s (* -1.0 s)))
+          det))))
 
 ;; determinant (floats)
 ;; k is for sqr matrix
 (bind-func mdetrmf
   (lambda (ma:float* k:i64)
     (if (= k 1) (pref ma 0)
-	(let ((det:float 0.0) (s:float 1.0)
-	      (c 0) (i 0) (j 0) (m 0) (n 0)
-	      (mb:float* (salloc (* k k))))
-	  (dotimes (c k)
-	    (set! m 0) (set! n 0)
-	    (dotimes (i k)
-	      (dotimes (j k)
-		(pset! mb (+ (* i k) j) 0.0)
-		(if (and (<> i 0) (<> j c))
-		    (begin
-		      (pset! mb (+ (* m (- k 1)) n)
-			     (pref ma (+ (* i k) j)))
-		      (if (< n (- k 2))
-			  (set! n (+ n 1))
-			  (begin
-			    (set! n 0)
-			    (set! m (+ m 1)))))
-		    (begin 1))))
-	    (set! det (+ det (* s (* (pref ma c)
-				     (mdetrmf mb (- k 1))))))
-	    (set! s (* -1.0 s)))
-	  det))))
+        (let ((det:float 0.0) (s:float 1.0)
+              (c 0) (i 0) (j 0) (m 0) (n 0)
+              (mb:float* (salloc (* k k))))
+          (dotimes (c k)
+            (set! m 0) (set! n 0)
+            (dotimes (i k)
+              (dotimes (j k)
+                (pset! mb (+ (* i k) j) 0.0)
+                (if (and (<> i 0) (<> j c))
+                    (begin
+                      (pset! mb (+ (* m (- k 1)) n)
+                             (pref ma (+ (* i k) j)))
+                      (if (< n (- k 2))
+                          (set! n (+ n 1))
+                          (begin
+                            (set! n 0)
+                            (set! m (+ m 1)))))
+                    (begin 1))))
+            (set! det (+ det (* s (* (pref ma c)
+                                     (mdetrmf mb (- k 1))))))
+            (set! s (* -1.0 s)))
+          det))))
 
 (bind-poly mdetrm mdetrmd)
 (bind-poly mdetrm mdetrmf)
@@ -541,77 +541,77 @@
 (bind-func minvd
   (lambda (ma:double* k:i64 inv:double*)
     (let ((mb:double* (salloc (* k k)))
-	  (fac:double* (salloc (* k k)))
-	  (d:double 0.0)
-	  (i 0) (j 0) (m 0) (n 0) (q:i64 0) (p:i64 0))
+          (fac:double* (salloc (* k k)))
+          (d:double 0.0)
+          (i 0) (j 0) (m 0) (n 0) (q:i64 0) (p:i64 0))
       (dotimes (q k)
-	(dotimes (p k)
-	  (set! m 0)
-	  (set! n 0)
-	  (dotimes (i k)
-	    (dotimes (j k)
-	      (pset! mb (+ (* i k) j) 0.0)
-	      (if (and (<> i q) (<> j p))
-		  (begin
-		    (pset! mb (+ (* m (- k 1)) n)
-			   (pref ma (+ (* i k) j)))
-		    (if (< n (- k 2))
-			(set! n (+ n 1))
-			(begin
-			  (set! n 0)
-			  (set! m (+ m 1)))))
-		  (begin 1))))
-	  (pset! fac (+ (* q k) p)
-		 (* (pow -1.0 (i64tod (+ q p)))
-		    (mdetrmd mb (- k 1))))))
+        (dotimes (p k)
+          (set! m 0)
+          (set! n 0)
+          (dotimes (i k)
+            (dotimes (j k)
+              (pset! mb (+ (* i k) j) 0.0)
+              (if (and (<> i q) (<> j p))
+                  (begin
+                    (pset! mb (+ (* m (- k 1)) n)
+                           (pref ma (+ (* i k) j)))
+                    (if (< n (- k 2))
+                        (set! n (+ n 1))
+                        (begin
+                          (set! n 0)
+                          (set! m (+ m 1)))))
+                  (begin 1))))
+          (pset! fac (+ (* q k) p)
+                 (* (pow -1.0 (i64tod (+ q p)))
+                    (mdetrmd mb (- k 1))))))
       (dotimes (i k)
-	(dotimes (j k)
-	  (pset! mb (+ (* i k) j)
-		 (pref fac (+ (* j k) i)))))
+        (dotimes (j k)
+          (pset! mb (+ (* i k) j)
+                 (pref fac (+ (* j k) i)))))
       (set! d (mdetrmd ma k))
       (dotimes (i k)
-	(dotimes (j k)
-	  (pset! inv (+ (* i k) j)
-		 (/ (pref mb (+ (* i k) j)) d))))
+        (dotimes (j k)
+          (pset! inv (+ (* i k) j)
+                 (/ (pref mb (+ (* i k) j)) d))))
       inv)))
 
 ;; invert matrix (floats)
 (bind-func minvf
   (lambda (ma:float* k:i64 inv:float*)
     (let ((mb:float* (salloc (* k k)))
-	  (fac:float* (salloc (* k k)))
-	  (d:float 0.0)
-	  (i 0) (j 0) (m 0) (n 0) (q:i64 0) (p:i64 0))
+          (fac:float* (salloc (* k k)))
+          (d:float 0.0)
+          (i 0) (j 0) (m 0) (n 0) (q:i64 0) (p:i64 0))
       (dotimes (q k)
-	(dotimes (p k)
-	  (set! m 0)
-	  (set! n 0)
-	  (dotimes (i k)
-	    (dotimes (j k)
-	      (pset! mb (+ (* i k) j) 0.0)
-	      (if (and (<> i q) (<> j p))
-		  (begin
-		    (pset! mb (+ (* m (- k 1)) n)
-			   (pref ma (+ (* i k) j)))
-		    (if (< n (- k 2))
-			(set! n (+ n 1))
-			(begin
-			  (set! n 0)
-			  (set! m (+ m 1)))))
-		  (begin 1))))
-	  (pset! fac (+ (* q k) p)
-		 (* (powf -1.0 (i64tof (+ q p)))
-		    (mdetrmf mb (- k 1))))))
+        (dotimes (p k)
+          (set! m 0)
+          (set! n 0)
+          (dotimes (i k)
+            (dotimes (j k)
+              (pset! mb (+ (* i k) j) 0.0)
+              (if (and (<> i q) (<> j p))
+                  (begin
+                    (pset! mb (+ (* m (- k 1)) n)
+                           (pref ma (+ (* i k) j)))
+                    (if (< n (- k 2))
+                        (set! n (+ n 1))
+                        (begin
+                          (set! n 0)
+                          (set! m (+ m 1)))))
+                  (begin 1))))
+          (pset! fac (+ (* q k) p)
+                 (* (powf -1.0 (i64tof (+ q p)))
+                    (mdetrmf mb (- k 1))))))
 
       (dotimes (i k)
-	(dotimes (j k)
-	  (pset! mb (+ (* i k) j)
-		 (pref fac (+ (* j k) i)))))
+        (dotimes (j k)
+          (pset! mb (+ (* i k) j)
+                 (pref fac (+ (* j k) i)))))
       (set! d (mdetrmf ma k))
       (dotimes (i k)
-	(dotimes (j k)
-	  (pset! inv (+ (* i k) j)
-		 (/ (pref mb (+ (* i k) j)) d))))
+        (dotimes (j k)
+          (pset! inv (+ (* i k) j)
+                 (/ (pref mb (+ (* i k) j)) d))))
       inv)))
 
 ;; poly to minv
@@ -642,7 +642,7 @@
       (pset! mat 4 (- (* (* x y) mcost) (* z sint)))
       (pset! mat 5 (+ cost (* (* y y) mcost)))
       (pset! mat 6 (+ (* (* z y) mcost) (* x sint)))
-      (pset! mat 7 0.0)      
+      (pset! mat 7 0.0)
       (pset! mat 8 (+ (* (* x z) mcost) (* y sint)))
       (pset! mat 9 (- (* (* y z) mcost) (* x sint)))
       (pset! mat 10 (+ cost (* (* z z) mcost)))
@@ -650,7 +650,7 @@
       (pset! mat 12 0.0)
       (pset! mat 13 0.0)
       (pset! mat 14 0.0)
-      (pset! mat 15 1.0)      
+      (pset! mat 15 1.0)
       mat)))
 
 ;; some helpful matrix builders
@@ -677,7 +677,7 @@
       (pset! mat 4 (- (* (* x y) mcost) (* z sint)))
       (pset! mat 5 (+ cost (* (* y y) mcost)))
       (pset! mat 6 (+ (* (* z y) mcost) (* x sint)))
-      (pset! mat 7 0.0)      
+      (pset! mat 7 0.0)
       (pset! mat 8 (+ (* (* x z) mcost) (* y sint)))
       (pset! mat 9 (- (* (* y z) mcost) (* x sint)))
       (pset! mat 10 (+ cost (* (* z z) mcost)))
@@ -734,7 +734,7 @@
 (bind-func magnitude_cpxf
   (lambda (cpx_val:cpxf*)
     (sqrtf (+ (powf (tref cpx_val 0) 2.0)
-                        (powf (tref cpx_val 1) 2.0)))))
+              (powf (tref cpx_val 1) 2.0)))))
 
 (bind-func magnitude_cpxd
   (lambda (cpx_val:cpxd*)
@@ -809,16 +809,16 @@
   (lambda (re:float* im:float* com:cpxf* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr com i) 0 (pref re i))
-	(tset! (pref-ptr com i) 1 (pref im i))))
+        (tset! (pref-ptr com i) 0 (pref re i))
+        (tset! (pref-ptr com i) 1 (pref im i))))
     void))
 
 (bind-func fill_cpx_buffer_cpxd
   (lambda (re:double* im:double* com:cpxd* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr com i) 0 (pref re i))
-	(tset! (pref-ptr com i) 1 (pref im i))))
+        (tset! (pref-ptr com i) 0 (pref re i))
+        (tset! (pref-ptr com i) 1 (pref im i))))
     void))
 
 (bind-poly fill_cpx_buffer fill_cpx_buffer_cpxf)
@@ -828,18 +828,18 @@
   (lambda (signal:cpxf* conj:cpxf* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr conj i)
-	       1
-	       (* -1.0 (tref (pref-ptr signal i) 1))))
+        (tset! (pref-ptr conj i)
+               1
+               (* -1.0 (tref (pref-ptr signal i) 1))))
       void)))
 
 (bind-func conjugate_buffer_cpxd
   (lambda (signal:cpxd* conj:cpxd* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr conj i)
-	       1
-	       (* -1.0 (tref (pref-ptr signal i) 1))))
+        (tset! (pref-ptr conj i)
+               1
+               (* -1.0 (tref (pref-ptr signal i) 1))))
       void)))
 
 (bind-poly conjugate_buffer_cpx conjugate_buffer_cpxf)
@@ -849,13 +849,13 @@
   (lambda (cart:cpxf* pol:cpxf* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr pol i)
-	       0
-	       (sqrtf (+ (powf (tref (pref-ptr cart i) 0) 2.0)
+        (tset! (pref-ptr pol i)
+               0
+               (sqrtf (+ (powf (tref (pref-ptr cart i) 0) 2.0)
                          (powf (tref (pref-ptr cart i) 1) 2.0))))
-	(tset! (pref-ptr pol i)
-	       1
-	       (atan2f (tref (pref-ptr cart i) 1)
+        (tset! (pref-ptr pol i)
+               1
+               (atan2f (tref (pref-ptr cart i) 1)
                        (tref (pref-ptr cart i) 0)))))
     void))
 
@@ -863,42 +863,42 @@
   (lambda (pol:cpxf* cart:cpxf* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr cart i)
-	       0
-	       (* (tref (pref-ptr pol i) 0)
-		  (cosf (tref (pref-ptr pol i) 1))))
-	(tset! (pref-ptr cart i)
-	       1
-	       (* (tref (pref-ptr pol i) 0)
-		  (sinf (tref (pref-ptr pol i) 1))))))
+        (tset! (pref-ptr cart i)
+               0
+               (* (tref (pref-ptr pol i) 0)
+                  (cosf (tref (pref-ptr pol i) 1))))
+        (tset! (pref-ptr cart i)
+               1
+               (* (tref (pref-ptr pol i) 0)
+                  (sinf (tref (pref-ptr pol i) 1))))))
     void))
 
 (bind-func buffer_cart_to_pol_cpxd
   (lambda (cart:cpxd* pol:cpxd* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr pol i)
-	       0
-	       (sqrt (+ (pow (tref (pref-ptr cart i) 0) 2.0)
-			(pow (tref (pref-ptr cart i) 1) 2.0))))
-	(tset! (pref-ptr pol i)
-	       1
-	       (atan2 (tref (pref-ptr cart i) 1)
-		      (tref (pref-ptr cart i) 0)))))
+        (tset! (pref-ptr pol i)
+               0
+               (sqrt (+ (pow (tref (pref-ptr cart i) 0) 2.0)
+                        (pow (tref (pref-ptr cart i) 1) 2.0))))
+        (tset! (pref-ptr pol i)
+               1
+               (atan2 (tref (pref-ptr cart i) 1)
+                      (tref (pref-ptr cart i) 0)))))
     void))
 
 (bind-func buffer_pol_to_cart_cpxd
   (lambda (pol:cpxd* cart:cpxd* len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(tset! (pref-ptr cart i)
-	       0
-	       (* (tref (pref-ptr pol i) 0)
-		  (cos (tref (pref-ptr pol i) 1))))
-	(tset! (pref-ptr cart i)
-	       1
-	       (* (tref (pref-ptr pol i) 0)
-		  (sin (tref (pref-ptr pol i) 1))))))
+        (tset! (pref-ptr cart i)
+               0
+               (* (tref (pref-ptr pol i) 0)
+                  (cos (tref (pref-ptr pol i) 1))))
+        (tset! (pref-ptr cart i)
+               1
+               (* (tref (pref-ptr pol i) 0)
+                  (sin (tref (pref-ptr pol i) 1))))))
     void))
 
 (bind-poly buffer_cart_to_pol buffer_cart_to_pol_cpxf)
@@ -909,49 +909,49 @@
 (bind-func buffer_re_only_cpxf
   "get the (float) real components of the complex buffer"
   (lambda (in_cpxf:cpxf*
-      out_float:float*
-      len:i64)
+           out_float:float*
+           len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(pset! out_float
-	       i
-	       (tref (pref-ptr in_cpxf i) 0))))
+        (pset! out_float
+               i
+               (tref (pref-ptr in_cpxf i) 0))))
     void))
 
 (bind-func buffer_im_only_cpxf
   "get the (float) imaginary components of the complex buffer"
   (lambda (in_cpxf:cpxf*
-      out_float:float*
-      len:i64)
+           out_float:float*
+           len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(pset! out_float
-	       i
-	       (tref (pref-ptr in_cpxf i) 1))))
+        (pset! out_float
+               i
+               (tref (pref-ptr in_cpxf i) 1))))
     void))
 
 (bind-func buffer_re_only_cpxd
   "get the (double) real components of the complex buffer"
   (lambda (in_cpxd:cpxd*
-      out_double:double*
-      len:i64)
+           out_double:double*
+           len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(pset! out_double
-	       i
-	       (tref (pref-ptr in_cpxd i) 0))))
+        (pset! out_double
+               i
+               (tref (pref-ptr in_cpxd i) 0))))
     void))
 
 (bind-func buffer_im_only_cpxd
   "get the (double) imaginary components of the complex buffer"
   (lambda (in_cpxd:cpxd*
-      out_double:double*
-      len:i64)
+           out_double:double*
+           len:i64)
     (let ((i 0))
       (dotimes (i len)
-	(pset! out_double
-	       i
-	       (tref (pref-ptr in_cpxd i) 1))))
+        (pset! out_double
+               i
+               (tref (pref-ptr in_cpxd i) 1))))
     void))
 
 (bind-poly buffer_re_only buffer_re_only_cpxf)
@@ -961,8 +961,8 @@
 
 (bind-func buffer_cpxd_to_cpxf
   (lambda (in_cpxd:cpxd*
-      out_cpxf:cpxf*
-      len:i64)
+           out_cpxf:cpxf*
+           len:i64)
     (let ((i 0))
       (dotimes (i len)
         (tset! (pref-ptr out_cpxf i)
@@ -975,8 +975,8 @@
 
 (bind-func buffer_cpxf_to_cpxd
   (lambda (in_cpxf:cpxf*
-      out_cpxd:cpxd*
-      len:i64)
+           out_cpxd:cpxd*
+           len:i64)
     (let ((i 0))
       (dotimes (i len)
         (tset! (pref-ptr out_cpxd i)

@@ -6,7 +6,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -238,7 +238,7 @@
 ;;       (print-error "tell me where to find the opencv core dynamic library on your platform here!")))
 
 (bind-alias CvArr i8)
-;(bind-alias CvSeq i8) ;; cvseq is really complex struct
+                                        ;(bind-alias CvSeq i8) ;; cvseq is really complex struct
 (bind-alias CvFont i8) ;; cvfont is really complex struct
 (bind-alias CvGraph i8) ;; cvgraph is really complex struct
 (bind-alias CvGraphScanner i8) ;; CvGraphScanner is really complex struct
@@ -251,7 +251,7 @@
 (bind-type CvPoint <i32,i32>) ;; bitcast to ExtCvPoint
 (bind-alias ExtCvPoint i64)
 (bind-type CvSize <i32,i32>) ;; bitcast to ExtCvSize
-(bind-alias ExtCvSize i64) 
+(bind-alias ExtCvSize i64)
 (bind-type CvScalar <|4,double|>)
 (bind-type CvRect <i32,i32,i32,i32>) ;;bitcast CvRect into two i64 arguments!
 (bind-type CvSize2D32f <float,float>)
@@ -265,7 +265,7 @@
 (bind-type CvMemStoragePos <CvMemBlock*,i32>)
 (bind-type CvSeqBlock <CvSeqBlock*,CvSeqBlock*,i32,i32,i32>)
 (bind-type CvSlice <i32,i32>) ;; bitcast to ExtCvSlice
-(bind-alias ExtCvSlice i64) 
+(bind-alias ExtCvSlice i64)
 (bind-type CvSetElem <i32,CvSetElem*>)
 (bind-type CvSet <i32,CvSetElem*>)
 (bind-type CvGraphVtx <i32,i8*>)
@@ -304,28 +304,28 @@
 ;;     int  imageSize;
 ;;     char *imageData;               -> 17 image data
 ;;     int  widthStep;
-;;     int  BorderMode[4];     
+;;     int  BorderMode[4];
 ;;     int  BorderConst[4];           -> 20
 ;;     char *imageDataOrigin;
 ;; }
 (bind-type IplImage <i32,i32,i32,i32,i32,|4,i8|,|4,i8|,i32,i32,i32,i32,i32,i8*,i8*,i8*,i8*,i32,i8*,i32,|4,i32|,|4,i32|,i8*>)
-;(bind-alias IplImage i8)
+                                        ;(bind-alias IplImage i8)
 
-    ;; int flags; /* micsellaneous flags */ \                                  0
-    ;; int header_size; /* size of sequence header */ \                        1
-    ;; struct CvSeq* h_prev; /* previous sequence */ \                         
-    ;; struct CvSeq* h_next; /* next sequence */ \
-    ;; struct CvSeq* v_prev; /* 2nd previous sequence */ \
-    ;; struct CvSeq* v_next; /* 2nd next sequence */ \
-    ;; int total; /* total number of elements */ \                             6
-    ;; int elem_size;/* size of sequence element in bytes */ \                 7
-    ;; char* block_max;/* maximal bound of the last block */ \   
-    ;; char* ptr; /* current write pointer */ \
-    ;; int delta_elems; /* how many elements allocated when the sequence grows
-    ;;                     (sequence granularity) */ \
-    ;; CvMemStorage* storage; /* where the seq is stored */ \
-    ;; CvSeqBlock* free_blocks; /* free blocks list */ \
-    ;; CvSeqBlock* first; /* pointer to the first sequence block */
+;; int flags; /* micsellaneous flags */ \                                  0
+;; int header_size; /* size of sequence header */ \                        1
+;; struct CvSeq* h_prev; /* previous sequence */ \
+;; struct CvSeq* h_next; /* next sequence */ \
+;; struct CvSeq* v_prev; /* 2nd previous sequence */ \
+;; struct CvSeq* v_next; /* 2nd next sequence */ \
+;; int total; /* total number of elements */ \                             6
+;; int elem_size;/* size of sequence element in bytes */ \                 7
+;; char* block_max;/* maximal bound of the last block */ \
+;; char* ptr; /* current write pointer */ \
+;; int delta_elems; /* how many elements allocated when the sequence grows
+;;                     (sequence granularity) */ \
+;; CvMemStorage* storage; /* where the seq is stored */ \
+;; CvSeqBlock* free_blocks; /* free blocks list */ \
+;; CvSeqBlock* first; /* pointer to the first sequence block */
 
 (bind-type CvSeq <i32,i32,i8*,i8*,i8*,i8*,i32,i32,i8*,i8*,i32,i8*,i8*,i8*>)
 
@@ -343,20 +343,20 @@
 (bind-lib ocv_core_lib cvEndWriteSeq [CvSeq*,i8*]*)
 (bind-lib ocv_core_lib cvFindGraphEdge [i8*,CvGraph*,i32,i32]*)
 (bind-lib ocv_core_lib cvFindGraphEdgeByPtr [CvGraphEdge*,CvGraph*,CvGraphVtx*,CvGraphVtx*]*)
-;(bind-lib ocv_core_lib cvGetGraphVtx [CvGraphVtx*,CvGraph*,i32]*)
+                                        ;(bind-lib ocv_core_lib cvGetGraphVtx [CvGraphVtx*,CvGraph*,i32]*)
 (bind-lib ocv_core_lib cvGetSeqElem [i8*,CvSeq*,i32]*)
-;(bind-lib ocv_core_lib cvGetSetElem [CvSetElem*,CvSet*,i32]*)
+                                        ;(bind-lib ocv_core_lib cvGetSetElem [CvSetElem*,CvSet*,i32]*)
 (bind-lib ocv_core_lib cvGraphAddEdge [i32,CvGraph*,i32,i32,CvGraphEdge*,CvGraphEdge**]*)
 (bind-lib ocv_core_lib cvGraphAddEdgeByPtr [i32,CvGraph*,CvGraphVtx*,CvGraphVtx*,CvGraphEdge*,CvGraphEdge**]*)
 (bind-lib ocv_core_lib cvGraphAddVtx [i32,CvGraph*,CvGraphVtx*,CvGraphVtx*]*)
-;(bind-lib ocv_core_lib cvGraphEdgeIdx [i32,CvGraph*,CvGraphEdge*]*)
+                                        ;(bind-lib ocv_core_lib cvGraphEdgeIdx [i32,CvGraph*,CvGraphEdge*]*)
 (bind-lib ocv_core_lib cvGraphRemoveEdge [void,CvGraph*,i32,i32]*)
 (bind-lib ocv_core_lib cvGraphRemoveEdgeByPtr [void,CvGraph*,CvGraphVtx*,CvGraphVtx*]*)
 (bind-lib ocv_core_lib cvGraphRemoveVtx [i32,CvGraph*,i32]*)
 (bind-lib ocv_core_lib cvGraphRemoveVtxByPtr [i32,CvGraph*,CvGraphVtx*]*)
 (bind-lib ocv_core_lib cvGraphVtxDegree [i32,CvGraph*,i32]*)
 (bind-lib ocv_core_lib cvGraphVtxDegreeByPtr [i32,CvGraph*,CvGraphVtx*]*)
-;(bind-lib ocv_core_lib cvGraphVtxIdx [i32,CvGraph*,CvGraphVtx*]*)
+                                        ;(bind-lib ocv_core_lib cvGraphVtxIdx [i32,CvGraph*,CvGraphVtx*]*)
 (bind-lib ocv_core_lib cvNextGraphItem [i32,CvGraphScanner*]*)
 (bind-lib ocv_core_lib cvNextTreeNode [i8*,i8*]*)
 (bind-lib ocv_core_lib cvPrevTreeNode [i8*,i8*]*)
@@ -376,19 +376,19 @@
 (bind-lib ocv_core_lib cvSeqSlice [CvSeq*,CvSeq*,ExtCvSlice,CvMemStorage*,i32]*)
 (bind-lib ocv_core_lib cvSeqSort [void,CvSeq*,i8*,i8*]*)
 (bind-lib ocv_core_lib cvSetAdd [i32,CvSet*,CvSetElem*,CvSetElem**]*)
-;(bind-lib ocv_core_lib cvSetNew [CvSetElem*,CvSet*]*)
+                                        ;(bind-lib ocv_core_lib cvSetNew [CvSetElem*,CvSet*]*)
 (bind-lib ocv_core_lib cvSetRemove [void,CvSet*,i32]*)
-;(bind-lib ocv_core_lib cvSetRemoveByPtr [void,CvSet*,i8*]*)
+                                        ;(bind-lib ocv_core_lib cvSetRemoveByPtr [void,CvSet*,i8*]*)
 (bind-lib ocv_core_lib cvStartAppendToSeq [void,CvSeq*,i8*]*)
 (bind-lib ocv_core_lib cvStartReadSeq [void,CvSeq*,i8*,i32]*)
 (bind-lib ocv_core_lib cvStartWriteSeq [i32,i32,i32,CvMemStorage*,i8*]*)
 (bind-lib ocv_core_lib cvTreeToNodeSeq [CvSeq*,i8*,i32,CvMemStorage*]*)
 (bind-lib ocv_core_lib cvCreateData [void,CvArr*]*)
 (bind-lib ocv_core_lib cvReleaseData [void,CvArr*]*)
-;(bind-lib ocv_core_lib cvCreateImage [IplImage*,ExtCvSize,i32,i32]*)
+                                        ;(bind-lib ocv_core_lib cvCreateImage [IplImage*,ExtCvSize,i32,i32]*)
 (bind-lib ocv_core_lib cvCreateImageHeader [IplImage*,ExtCvSize,i32,i32]*)
 (bind-lib ocv_core_lib cvCloneImage [IplImage*,IplImage*]*)
-;(bind-lib ocv_core_lib cvReleaseImage [void,IplImage**]*)
+                                        ;(bind-lib ocv_core_lib cvReleaseImage [void,IplImage**]*)
 (bind-lib ocv_core_lib cvCreateMat [i8*,i32,i32,i32]*)
 (bind-lib ocv_core_lib cvSetImageCOI [void,IplImage*,i32]*)
 (bind-lib ocv_core_lib cvSetImageROI [void,IplImage*,i64,i64]*)
@@ -399,7 +399,7 @@
 (bind-lib ocv_core_lib cvGetRealND [double,CvArr*,i32*]*)
 
 
-;(bind-lib ocv_core_lib cvCloneSeq [CvSeq*,CvSeq*,CvMemStorage*]*)
+                                        ;(bind-lib ocv_core_lib cvCloneSeq [CvSeq*,CvSeq*,CvMemStorage*]*)
 
 ;; i32 ->
 ;; 0 = flip around x
@@ -407,16 +407,16 @@
 ;; -1 =  flip both x and y
 (bind-lib ocv_core_lib cvFlip [void,CvArr*,CvArr*,i32]*)
 (bind-lib ocv_core_lib cvGetSize [ExtCvSize,CvArr*]*)
-;(bind-lib ocv_core_lib ExtCvSize [CvSize,i32,i32]*)
-;(bind-lib ocv_core_lib ExtCvSizeTwo [CvSize*,i32,i32]*)
-;(bind-lib ocv_core_lib cvGetSize [<i32,i32>,CvArr*]*)
+                                        ;(bind-lib ocv_core_lib ExtCvSize [CvSize,i32,i32]*)
+                                        ;(bind-lib ocv_core_lib ExtCvSizeTwo [CvSize*,i32,i32]*)
+                                        ;(bind-lib ocv_core_lib cvGetSize [<i32,i32>,CvArr*]*)
 
 ;; drawing functions
 (bind-lib ocv_core_lib cvCircle [void,CvArr*,ExtCvPoint,i32,CvScalar,i32,i32,i32]*)
 (bind-lib ocv_core_lib cvClipLine [i32,ExtCvSize,CvPoint*,CvPoint*]*)
 (bind-lib ocv_core_lib cvDrawContours [void,CvArr*,CvSeq*,CvScalar,CvScalar,i32,i32,i32]*)
 (bind-lib ocv_core_lib cvEllipse [void,CvArr*,ExtCvPoint,ExtCvSize,double,double,double,CvScalar,i32,i32,i32]*)
-;(bind-lib ocv_core_lib cvEllipseBox [void,CvArr*,CvBox2D,CvScalar,i32,i32,i32]*)
+                                        ;(bind-lib ocv_core_lib cvEllipseBox [void,CvArr*,CvBox2D,CvScalar,i32,i32,i32]*)
 (bind-lib ocv_core_lib cvFillConvexPoly [void,CvArr*,CvPoint*,i32,CvScalar,i32,i32]*)
 (bind-lib ocv_core_lib cvFillPoly [void,CvArr*,CvPoint**,i32*,i32,CvScalar,i32,i32]*)
 (bind-lib ocv_core_lib cvGetTextSize [void,i8*,CvFont*,CvSize*,i32*]*)
@@ -427,14 +427,14 @@
 (bind-lib ocv_core_lib cvPutText [void,CvArr*,i8*,ExtCvPoint,CvFont*,CvScalar]*)
 (bind-lib ocv_core_lib cvRectangle [void,CvArr*,ExtCvPoint,ExtCvPoint,CvScalar,i32,i32,i32]*)
 (bind-func cvMakeColour (lambda (r g b) ;; returns CvScalar
-			  (let ((s:CvScalar* (salloc)) (a (tref-ptr s 0)))
-			    (aset! a 0 b) (aset! a 1 g) (aset! a 0 r) (pref s 0))))
-			    
+                          (let ((s:CvScalar* (salloc)) (a (tref-ptr s 0)))
+                            (aset! a 0 b) (aset! a 1 g) (aset! a 0 r) (pref s 0))))
+
 
 ;; void cvCanny(const CvArr* image, CvArr* edges, double threshold1, double threshold2, int aperture_size=3)
 (bind-lib ocv_features_lib cvCanny [void,CvArr*,CvArr*,double,double,i32]*)
 (bind-lib ocv_hgui_lib cvLoadImage [IplImage*,i8*,i32]*)
-;(bind-lib ocv_hgui_lib cvCaptureFromFile [i8*,i8*]*)
+                                        ;(bind-lib ocv_hgui_lib cvCaptureFromFile [i8*,i8*]*)
 (bind-lib ocv_hgui_lib cvGrabFrame [i32,i8*]*)
 (bind-lib ocv_iproc_lib cvCvtColor [void,CvArr*,CvArr*,i32]*)
 
@@ -498,8 +498,8 @@
 ;;                // for non-maxima suppression
 ;; }
 (bind-type CvStarDetectorParams <i32,i32,i32,i32,i32>)
-;(bind-lib ocv_features_lib cvGetStarKeypoints [CvSeq*,CvArr*,CvMemStorage*,CvStarDetectorParams*]*)
-;(bind-lib ocv_features_lib extCvGetStarKeypoints [CvSeq*,CvArr*,CvMemStorage*,CvStarDetectorParams*]*)
+                                        ;(bind-lib ocv_features_lib cvGetStarKeypoints [CvSeq*,CvArr*,CvMemStorage*,CvStarDetectorParams*]*)
+                                        ;(bind-lib ocv_features_lib extCvGetStarKeypoints [CvSeq*,CvArr*,CvMemStorage*,CvStarDetectorParams*]*)
 (bind-lib ocv_wrapper_lib _cvGetStarKeypoints [CvSeq*,CvArr*,CvMemStorage*,CvStarDetectorParams*]*)
 
 (bind-lib ocv_wrapper_lib _cvGetImageData [i8*,IplImage*]*)
