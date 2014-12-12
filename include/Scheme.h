@@ -5,41 +5,42 @@
  * All rights reserved.
  *
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice, 
+ * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation 
+ *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  *
  * Neither the name of the authors nor other contributors may be used to endorse
- * or promote products derived from this software without specific prior written 
+ * or promote products derived from this software without specific prior written
  * permission.
  *
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLEXTD. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLEXTD. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//   Originally from TinyScheme v1.35 (2005) but subsequently reworked for use in impromptu
+//   Originally from TinyScheme v1.35 (2005) but subsequently reworked for use
+//   in impromptu
 //   Modified again before initial inclusion in Extempore project January 2011
 //
-//   Original TinyScheme Credits Below:   
+//   Original TinyScheme Credits Below:
 //   Dimitrios Souflis (dsouflis@acm.org)
 //   Based on MiniScheme (original credits follow)
 //   (MINISCM)               coded by Atsushi Moriwaki (11/5/1989)
@@ -50,10 +51,10 @@
 //   (MINISCM)
 //   (MINISCM) This is a revised and modified version by Akira KIDA.
 //   (MINISCM)	current version is 0.85k4 (15 May 1994)
-// 
-//   TinyScheme v.1.35 released under MIT licence.  This file also released under MIT licence.
+//
+//   TinyScheme v.1.35 released under MIT licence.  This file also released
+//   under MIT licence.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 #ifndef _SCHEME_H
 #define _SCHEME_H
@@ -68,90 +69,91 @@
 /*
  * Default values for #define'd symbols
  */
-#ifndef STANDALONE       /* If used as standalone interpreter */
-# define STANDALONE 1
+#ifndef STANDALONE /* If used as standalone interpreter */
+#define STANDALONE 1
 #endif
 
-#ifndef _MSC_VER 
-# define USE_STRCASECMP 1 
-# define USE_STRLWR 1 
-# define SCHEME_EXPORT
-#else 
-# define USE_STRCASECMP 0 
-# define USE_STRLWR 0 
-# ifdef _SCHEME_SOURCE
-#  define SCHEME_EXPORT __declspec(dllexport)
-# else
-#  define SCHEME_EXPORT __declspec(dllimport)
-# endif
+#ifndef _MSC_VER
+#define USE_STRCASECMP 1
+#define USE_STRLWR 1
+#define SCHEME_EXPORT
+#else
+#define USE_STRCASECMP 0
+#define USE_STRLWR 0
+#ifdef _SCHEME_SOURCE
+#define SCHEME_EXPORT __declspec(dllexport)
+#else
+#define SCHEME_EXPORT __declspec(dllimport)
+#endif
 #endif
 
 #if USE_NO_FEATURES
-# define USE_MATH 0
-# define USE_CHAR_CLASSIFIERS 0
-# define USE_ASCII_NAMES 0
-# define USE_STRING_PORTS 0
-# define USE_ERROR_HOOK 0
-# define USE_TRACING 0
-# define USE_COLON_HOOK 0
-# define USE_DL 0
-# define USE_PLIST 0
+#define USE_MATH 0
+#define USE_CHAR_CLASSIFIERS 0
+#define USE_ASCII_NAMES 0
+#define USE_STRING_PORTS 0
+#define USE_ERROR_HOOK 0
+#define USE_TRACING 0
+#define USE_COLON_HOOK 0
+#define USE_DL 0
+#define USE_PLIST 0
 #endif
 
 /*
  * Leave it defined if you want continuations, and also for the Sharp Zaurus.
- * Undefine it if you only care about faster speed and not strict Scheme compatibility.
+ * Undefine it if you only care about faster speed and not strict Scheme
+ * compatibility.
  */
 //#define USE_SCHEME_STACK
 
 #if USE_DL
-# define USE_INTERFACE 1
+#define USE_INTERFACE 1
 #endif
 
-
-#ifndef USE_MATH         /* If math support is needed */
-# define USE_MATH 1
+#ifndef USE_MATH /* If math support is needed */
+#define USE_MATH 1
 #endif
 
-#ifndef USE_CHAR_CLASSIFIERS  /* If char classifiers are needed */
-# define USE_CHAR_CLASSIFIERS 1
+#ifndef USE_CHAR_CLASSIFIERS /* If char classifiers are needed */
+#define USE_CHAR_CLASSIFIERS 1
 #endif
 
-#ifndef USE_ASCII_NAMES  /* If extended escaped characters are needed */
-# define USE_ASCII_NAMES 1
+#ifndef USE_ASCII_NAMES /* If extended escaped characters are needed */
+#define USE_ASCII_NAMES 1
 #endif
 
-#ifndef USE_STRING_PORTS      /* Enable string ports */
-# define USE_STRING_PORTS 1
+#ifndef USE_STRING_PORTS /* Enable string ports */
+#define USE_STRING_PORTS 1
 #endif
 
 #ifndef USE_TRACING
-# define USE_TRACING 1
+#define USE_TRACING 1
 #endif
 
 #ifndef USE_PLIST
-# define USE_PLIST 1
+#define USE_PLIST 1
 #endif
 
-/* To force system errors through user-defined error handling (see *error-hook*) */
+/* To force system errors through user-defined error handling (see *error-hook*)
+ */
 #ifndef USE_ERROR_HOOK
-# define USE_ERROR_HOOK 1
+#define USE_ERROR_HOOK 1
 #endif
 
-#ifndef USE_COLON_HOOK   /* Enable qualified qualifier */
-# define USE_COLON_HOOK 1
+#ifndef USE_COLON_HOOK /* Enable qualified qualifier */
+#define USE_COLON_HOOK 1
 #endif
 
-#ifndef USE_STRCASECMP   /* stricmp for Unix */
-# define USE_STRCASECMP 0
+#ifndef USE_STRCASECMP /* stricmp for Unix */
+#define USE_STRCASECMP 0
 #endif
 
 #ifndef USE_STRLWR
-# define USE_STRLWR 1
+#define USE_STRLWR 1
 #endif
 
-#ifndef STDIO_ADDS_CR    /* Define if DOS/Windows */
-# define STDIO_ADDS_CR 0
+#ifndef STDIO_ADDS_CR /* Define if DOS/Windows */
+#define STDIO_ADDS_CR 0
 #endif
 
 //#ifndef INLINE
@@ -159,31 +161,29 @@
 //#endif
 
 #ifndef USE_INTERFACE
-# define USE_INTERFACE 0
+#define USE_INTERFACE 0
 #endif
 
 typedef struct scheme scheme;
-typedef struct cell *pointer; 
+typedef struct cell *pointer;
 
-typedef void * (*func_alloc)(size_t);
+typedef void *(*func_alloc)(size_t);
 typedef void (*func_dealloc)(void *);
-
 
 /* num, for generic arithmetic */
 typedef struct num {
-    int num_type;
-    union {
-	long long ivalue;
-	double rvalue;
-	struct {
-	    long long n;
-	    long long d;
-	} ratvalue;		
-    } value;
+  int num_type;
+  union {
+    long long ivalue;
+    double rvalue;
+    struct {
+      long long n;
+      long long d;
+    } ratvalue;
+  } value;
 } num;
 
-extern "C" 
-{
+extern "C" {
 scheme *scheme_init_new();
 scheme *scheme_init_new_custom_alloc(func_alloc malloc, func_dealloc free);
 int scheme_init(scheme *sc);
@@ -194,13 +194,16 @@ void scheme_set_input_port_string(scheme *sc, char *start, char *past_the_end);
 void scheme_set_output_port_file(scheme *sc, FILE *fin);
 void scheme_set_output_port_string(scheme *sc, char *start, char *past_the_end);
 void scheme_load_file(scheme *sc, FILE *fin);
-void scheme_load_string(scheme *sc, const char *cmd, unsigned long long int start_time, unsigned long long int end_time);
+void scheme_load_string(scheme *sc, const char *cmd,
+                        unsigned long long int start_time,
+                        unsigned long long int end_time);
 void scheme_apply0(scheme *sc, const char *procname);
 pointer scheme_apply1(scheme *sc, const char *procname, pointer);
 const char *procname(pointer x);
-pointer mk_continuation(scheme* sc);
-pointer mk_closure(scheme* sc, pointer c, pointer e);
-void scheme_call(scheme *sc, pointer func, pointer args, uint64_t start_time, uint64_t call_duration);
+pointer mk_continuation(scheme *sc);
+pointer mk_closure(scheme *sc, pointer c, pointer e);
+void scheme_call(scheme *sc, pointer func, pointer args, uint64_t start_time,
+                 uint64_t call_duration);
 void scheme_call_without_stack_reset(scheme *sc, pointer func, pointer args);
 void scheme_set_external_data(scheme *sc, void *p);
 void scheme_define(scheme *sc, pointer env, pointer symbol, pointer value);
@@ -208,22 +211,22 @@ void scheme_define(scheme *sc, pointer env, pointer symbol, pointer value);
 pointer find_slot_in_env(scheme *sc, pointer env, pointer sym, int all);
 void set_slot_in_env(scheme *sc, pointer slot, pointer value);
 pointer slot_value_in_env(pointer slot);
-void new_slot_in_env(scheme *sc, pointer variable, pointer value); 
+void new_slot_in_env(scheme *sc, pointer variable, pointer value);
 pointer reverse(scheme *sc, pointer a);
 pointer reverse_in_place(scheme *sc, pointer term, pointer list);
 pointer append(scheme *sc, pointer a, pointer b);
 int list_length(scheme *sc, pointer a);
 pointer assoc_strcmp(scheme *sc, pointer key, pointer alist);
 int is_real(pointer a);
-char * string_value(pointer p);
-pointer list_ref(scheme* sc, int pos, pointer a);
+char *string_value(pointer p);
+pointer list_ref(scheme *sc, int pos, pointer a);
 int eqv(pointer a, pointer b);
 pointer mk_vector(scheme *sc, int len);
-void fill_vector(scheme* sc, pointer vec, pointer obj);
+void fill_vector(scheme *sc, pointer vec, pointer obj);
 pointer vector_elem(pointer vec, int ielem);
-pointer set_vector_elem(scheme* sc, pointer vec, int ielem, pointer a);
-int scheme_init(scheme* sc);
-scheme* extempore_scheme_init_new();
+pointer set_vector_elem(scheme *sc, pointer vec, int ielem, pointer a);
+int scheme_init(scheme *sc);
+scheme *extempore_scheme_init_new();
 
 typedef pointer (*foreign_func)(scheme *, pointer);
 
@@ -240,22 +243,22 @@ pointer mk_float(scheme *sc, float num);
 pointer mk_rational(scheme *sc, long long n, long long d);
 pointer mk_symbol(scheme *sc, const char *name);
 pointer gensym(scheme *sc);
-//pointer rungc(scheme* sc, pointer a, pointer b);
+// pointer rungc(scheme* sc, pointer a, pointer b);
 pointer mk_string(scheme *sc, const char *str);
 pointer mk_counted_string(scheme *sc, const char *str, int len);
 pointer mk_character(scheme *sc, int c);
 pointer mk_foreign_func(scheme *sc, foreign_func f);
-pointer mk_cptr(scheme* sc, void* p);
+pointer mk_cptr(scheme *sc, void *p);
 void putstr(scheme *sc, const char *s);
 int pointer_type(pointer);
-void treadmill_print(scheme* sc, char* title);
+void treadmill_print(scheme *sc, char *title);
 
 void scheme_define(scheme *sc, pointer env, pointer symbol, pointer value);
 pointer cons(scheme *sc, pointer a, pointer b);
 pointer immutable_cons(scheme *sc, pointer a, pointer b);
 pointer mk_integer(scheme *sc, long long num);
 pointer mk_real(scheme *sc, double num);
-pointer mk_rational(scheme *sc, long long n, long long d);	
+pointer mk_rational(scheme *sc, long long n, long long d);
 pointer mk_symbol(scheme *sc, const char *name);
 pointer gensym(scheme *sc);
 //    pointer (*rungc)(scheme* sc, pointer a, pointer b);
@@ -264,19 +267,19 @@ pointer mk_counted_string(scheme *sc, const char *str, int len);
 pointer mk_character(scheme *sc, int c);
 pointer mk_vector(scheme *sc, int len);
 pointer mk_foreign_func(scheme *sc, foreign_func f);
-pointer mk_cptr(scheme* sc, void* p);
+pointer mk_cptr(scheme *sc, void *p);
 void putstr(scheme *sc, const char *s);
 void putcharacter(scheme *sc, int c);
 
 int is_string(pointer p);
-char* string_value(pointer p);
+char *string_value(pointer p);
 int is_number(pointer p);
 num nvalue(pointer p);
 long long ivalue(pointer p);
 long long i64value(pointer p);
 int i32value(pointer p);
 char i8value(pointer p);
-bool i1value(scheme* _sc, pointer p);
+bool i1value(scheme *_sc, pointer p);
 double rvalue(pointer p);
 double r64value(pointer p);
 float r32value(pointer p);
@@ -287,27 +290,27 @@ int is_character(pointer p);
 long long charvalue(pointer p);
 int is_vector(pointer p);
 long long vector_length(pointer vec);
-void fill_vector(scheme* sc, pointer vec, pointer elem);
+void fill_vector(scheme *sc, pointer vec, pointer elem);
 pointer vector_elem(pointer vec, int ielem);
-pointer set_vector_elem(scheme* sc, pointer vec, int ielem, pointer newel);
+pointer set_vector_elem(scheme *sc, pointer vec, int ielem, pointer newel);
 int is_port(pointer p);
 
 int is_pair(pointer p);
 pointer pair_car(pointer p);
 pointer pair_cdr(pointer p);
-pointer set_car(scheme* sc, pointer p, pointer q);
-pointer set_cdr(scheme* sc, pointer p, pointer q);
+pointer set_car(scheme *sc, pointer p, pointer q);
+pointer set_cdr(scheme *sc, pointer p, pointer q);
 
 int is_symbol(pointer p);
-char* symname(pointer p);
+char *symname(pointer p);
 
 int is_syntax(pointer p);
 int is_proc(pointer p);
 int is_foreign(pointer p);
 int is_cptr(pointer p);
 int is_cptr_or_str(pointer p);
-void* cptr_value(pointer p);
-char* syntaxname(pointer p);
+void *cptr_value(pointer p);
+char *syntaxname(pointer p);
 int is_closure(pointer p);
 int is_macro(pointer p);
 pointer closure_code(pointer p);
@@ -324,4 +327,3 @@ void load_string(scheme *sc, const char *input);
 }
 
 #endif
-
